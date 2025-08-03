@@ -1,9 +1,11 @@
-name: Release
+name: PyPI Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'  # Only publish to PyPI when tags are manually pushed/created
+  release:
+    types: [published]  # Also trigger on GitHub release publication
 
 permissions:
   contents: write
@@ -13,6 +15,8 @@ jobs:
   build:
     name: Build Release
     runs-on: ubuntu-latest
+    # This workflow only runs when tags are manually created or GitHub releases are published
+    # Version bumps and tag creation are handled by release-prep.yml
     
     steps:
       - name: Checkout code
