@@ -196,3 +196,66 @@ Initially planned to use Black for formatting and Ruff for linting, but Ruff now
 **Negative:**
 - Ruff format is newer and less battle-tested than Black
 - Team needs to learn new command (`ruff format` vs `black .`)
+
+## 2025-08-03: FastMCP Development Best Practices
+
+**ID:** DEC-005
+**Status:** Accepted
+**Category:** Technical
+**Stakeholders:** Development Team, AI Assistants
+
+### Decision
+
+Establish mandatory development patterns for FastMCP implementation, TDD workflow, and MCP protocol compliance to prevent common development mistakes and ensure consistent code quality.
+
+### Context
+
+During implementation of the MCP protocol compliance foundation (Task 2), several critical development patterns emerged that must be followed to avoid costly trial-and-error cycles. These patterns are particularly important for AI-assisted development where proper guidance prevents repeating the same mistakes.
+
+### Required Development Practices
+
+1. **FastMCP Testing Patterns**
+   - Always use `Client(server)` pattern for in-memory testing
+   - Never access FastMCP server internals directly (`server.list_tools()`, `server.get_tools()`)
+   - All MCP tool testing must go through proper FastMCP Client API
+
+2. **TDD Discipline** 
+   - Write tests first when implementing new features
+   - Follow strict red-green-refactor cycle
+   - See tests fail before implementing functionality
+
+3. **External Library Integration**
+   - Consult Context7 documentation before making FastMCP API assumptions
+   - Research proper patterns rather than guessing
+   - "Think hard" and look up authoritative examples
+
+4. **MCP Protocol Compliance**
+   - Never contaminate stdout (breaks JSON-RPC communication)
+   - All logging must go to stderr only
+   - Test stdout cleanliness rigorously with captured stdout/stderr
+
+5. **Development Environment**
+   - Use `PYTHONPATH=src` during development testing
+   - Handle async testing properly with `asyncio.run()` and `async with`
+   - Run tests with: `PYTHONPATH=src uv run pytest tests/ -v`
+
+### Rationale
+
+These practices emerged from actual development experience where:
+- FastMCP testing initially failed due to incorrect API usage patterns
+- TDD discipline was broken, leading to implementation-first approach
+- MCP protocol compliance required specific testing patterns not obvious from documentation
+- Python package import issues caused test failures in development
+
+### Consequences
+
+**Positive:**
+- Prevents repeating costly trial-and-error development cycles
+- Ensures MCP protocol compliance from the start
+- Maintains consistent code quality across team and AI assistants
+- Reduces debugging time by following proven patterns
+
+**Negative:**
+- Requires learning specific FastMCP patterns that may not be intuitive
+- TDD discipline requires more upfront planning
+- Additional testing setup complexity with async patterns
