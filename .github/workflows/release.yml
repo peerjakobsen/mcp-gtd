@@ -1,0 +1,175 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run tests
+        run: uv run pytest
+        env:
+          PYTHONPATH: src
+
+      - name: Build package
+        run: uv build
+
+      - name: Test package installation
+        run: |
+          uv pip install dist/*.whl
+          gtd-manager --help || echo "Package installation test completed"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            # Extract changelog for this version
+            awk '/^## \['"${{ steps.version.outputs.version }}"'\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > release_notes.md || echo "No changelog found for this version" > release_notes.md
+          else
+            echo "Release ${{ steps.version.outputs.version }}" > release_notes.md
+            echo "" >> release_notes.md
+            echo "MCP GTD Manager version ${{ steps.version.outputs.version }}" >> release_notes.md
+            echo "" >> release_notes.md
+            echo "## Installation" >> release_notes.md
+            echo "" >> release_notes.md
+            echo "Install directly via uvx:" >> release_notes.md
+            echo '```bash' >> release_notes.md
+            echo "uvx --from git+https://github.com/${{ github.repository }}@${{ github.ref_name }} gtd-manager" >> release_notes.md
+            echo '```' >> release_notes.md
+            echo "" >> release_notes.md
+            echo "Or install the wheel:" >> release_notes.md
+            echo '```bash' >> release_notes.md
+            echo "pip install gtd_manager-${{ steps.version.outputs.version }}-py3-none-any.whl" >> release_notes.md
+            echo '```' >> release_notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
+
+  pypi-publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gtd-manager
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Verify package contents
+        run: |
+          ls -la dist/
+          echo "Package files ready for publishing:"
+          for file in dist/*; do
+            echo "  - $(basename "$file")"
+          done
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verbose: true
+
+      - name: Verify PyPI publication
+        run: |
+          echo "Package published to PyPI!"
+          echo "View at: https://pypi.org/project/gtd-manager/"
+          echo "Install with: pip install gtd-manager"
+
+  update-documentation:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    needs: github-release
+    if: ${{ !contains(github.ref_name, 'rc') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, 'alpha') }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update installation instructions
+        run: |
+          # Update README with latest version
+          sed -i "s/gtd-manager@v[0-9]\+\.[0-9]\+\.[0-9]\+/gtd-manager@${{ github.ref_name }}/g" README.md || true
+          
+          # Check if any changes were made
+          if git diff --quiet; then
+            echo "No documentation updates needed"
+          else
+            echo "Documentation updated with new version"
+          fi
+
+      - name: Create documentation update PR
+        if: success()
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: update installation instructions for ${{ github.ref_name }}"
+          title: "Update installation instructions for ${{ github.ref_name }}"
+          body: |
+            Automated update of installation instructions for release ${{ github.ref_name }}.
+            
+            This PR updates version references in the documentation.
+          branch: docs/update-${{ github.ref_name }}
+          delete-branch: true

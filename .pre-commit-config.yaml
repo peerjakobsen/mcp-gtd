@@ -17,15 +17,8 @@ repos:
       - id: mixed-line-ending
         args: ['--fix=lf']
 
-  # Python code formatting with Black
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-        language_version: python3.13
-        args: ['--line-length=88']
 
-  # Python linting with Ruff (replaces flake8, isort, etc.)
+  # Python linting and formatting with Ruff (replaces Black, flake8, isort, etc.)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.4.8
     hooks:
@@ -51,7 +44,8 @@ repos:
     rev: 1.7.8
     hooks:
       - id: bandit
-        args: ['-r', '.', '-f', 'json', '-o', 'bandit-report.json']
+        args: ['-r', '-f', 'json', '-o', 'bandit-report.json']
+        files: ^src/
         exclude: ^tests/
 
   # Markdown linting
@@ -77,13 +71,13 @@ repos:
       - id: hadolint-docker
         args: ['--ignore', 'DL3008', '--ignore', 'DL3009']
 
-  # Secrets detection
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
-    hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
-        exclude: ^(\.secrets\.baseline|tests/fixtures/)
+  # Secrets detection (disabled for now due to version conflicts)
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.4.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       args: ['--baseline', '.secrets.baseline']
+  #       exclude: ^(\.secrets\.baseline|tests/fixtures/)
 
   # SQL formatting (for migration files)
   - repo: https://github.com/sqlfluff/sqlfluff

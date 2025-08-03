@@ -14,12 +14,14 @@ GTD Manager is an MCP server that helps team leads with extreme context switchin
 ### User Personas
 
 **Overwhelmed Team Lead** (30-45 years old)
+
 - **Role:** Engineering Manager or Team Lead
 - **Context:** Manages 8-12 direct reports, attends 15-20 meetings per week
 - **Pain Points:** Constant context switching, losing track of action items, inefficient meeting preparation
 - **Goals:** Capture all commitments reliably, reduce cognitive load, maximize meeting effectiveness
 
 **Senior Manager** (35-50 years old)
+
 - **Role:** Director or Senior Manager
 - **Context:** Oversees multiple teams, heavy meeting schedule with executives and ICs
 - **Pain Points:** Information scattered across tools, difficulty tracking delegated items, meeting follow-ups get lost
