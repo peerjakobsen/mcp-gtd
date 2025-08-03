@@ -311,6 +311,7 @@ changelog_temp.md
 test.db
 test.sqlite
 mcp_test.db
+data.db
 
 # IDE and editor temporary files
 *.swp
