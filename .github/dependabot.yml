@@ -34,12 +34,6 @@ updates:
           - "mypy*"
           - "pre-commit*"
         dependency-type: "development"
-      # Group security updates
-      security-updates:
-        patterns:
-          - "*"
-        update-types:
-          - "security"
 
   # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
