@@ -3,7 +3,7 @@ name: Release Preparation
 on:
   push:
     branches: [main]
-  workflow_dispatch:  # Allow manual triggers
+  workflow_dispatch: # Allow manual triggers
 
 permissions:
   contents: write
@@ -14,7 +14,7 @@ jobs:
     name: Prepare Release
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,16 +43,16 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           uv run semantic-release version --print
-          
+
           # Check if a new version was created
           if uv run semantic-release version --print --no-commit --no-tag --no-push | grep -q "No release will be made"; then
             echo "No new version needed based on commit messages"
             exit 0
           fi
-          
+
           # Create version bump, tag, and changelog
           uv run semantic-release version
-          
+
           echo "Release preparation completed!"
           echo "New version tag created and ready for manual PyPI publishing"
 

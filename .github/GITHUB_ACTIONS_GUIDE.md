@@ -109,7 +109,7 @@ This document explains the CI/CD setup for the GTD Manager MCP Server project.
 
 ### Required Checks
 - ✅ Ruff linting passes
-- ✅ mypy type checking passes  
+- ✅ mypy type checking passes
 - ✅ All tests pass
 - ✅ Package builds successfully
 - ✅ MCP protocol compliance verified

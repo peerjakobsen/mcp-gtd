@@ -39,7 +39,7 @@ We follow responsible disclosure practices:
 
 This MCP server:
 - Operates over stdio using JSON-RPC protocol
-- Has minimal external dependencies (FastMCP, structlog)  
+- Has minimal external dependencies (FastMCP, structlog)
 - Does not handle sensitive user data by default
 - Logs to stderr only to maintain MCP protocol compliance
 

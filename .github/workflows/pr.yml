@@ -14,7 +14,7 @@ jobs:
     name: Quick Quality Check
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,8 +30,9 @@ jobs:
       - name: Install dependencies
         run: uv sync --extra dev
 
+      # PR workflow auto-fixes issues, unlike CI which only checks
       - name: Run Ruff linting (with fixes)
-        run: uv run ruff check . --fix --exit-zero
+        run: uv run ruff check . --fix
 
       - name: Run Ruff formatting
         run: uv run ruff format .
@@ -61,7 +62,7 @@ jobs:
     name: Fast Test Suite
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -87,24 +88,24 @@ jobs:
           uv run python -c "
           import sys
           from io import StringIO
-          
+
           old_stdout, old_stderr = sys.stdout, sys.stderr
           captured_stdout = StringIO()
           captured_stderr = StringIO()
-          
+
           try:
               sys.stdout = captured_stdout
               sys.stderr = captured_stderr
-              
+
               from gtd_manager.server import server
-              
+
               stdout_content = captured_stdout.getvalue()
               if stdout_content:
                   print('❌ MCP protocol violation: stdout contaminated', file=sys.__stderr__)
                   sys.exit(1)
               else:
                   print('✅ MCP protocol compliance verified', file=sys.__stderr__)
-                  
+
           finally:
               sys.stdout = old_stdout
               sys.stderr = old_stderr
@@ -116,7 +117,7 @@ jobs:
     name: Test Build
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -145,7 +146,7 @@ jobs:
     name: Security Check
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -177,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quick-check, test, build, security]
     if: always() && github.event.pull_request.draft == false
-    
+
     steps:
       - name: Comment PR
         uses: actions/github-script@v7
@@ -189,35 +190,35 @@ jobs:
               'build': '${{ needs.build.result }}',
               'security': '${{ needs.security.result }}'
             };
-            
+
             const passed = Object.values(results).filter(r => r === 'success').length;
             const total = Object.keys(results).length;
-            
+
             let comment = `## PR Check Results\n\n`;
             comment += `✅ **${passed}/${total}** checks passed\n\n`;
-            
+
             for (const [job, result] of Object.entries(results)) {
               const emoji = result === 'success' ? '✅' : result === 'failure' ? '❌' : '⚠️';
               comment += `${emoji} **${job}**: ${result}\n`;
             }
-            
+
             if (passed === total) {
               comment += `\n🚀 All checks passed! Ready for review.`;
             } else {
               comment += `\n🔍 Some checks failed. Please review and fix issues.`;
             }
-            
+
             // Find existing comment to update or create new one
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
-            const existingComment = comments.find(c => 
+
+            const existingComment = comments.find(c =>
               c.user.type === 'Bot' && c.body.includes('PR Check Results')
             );
-            
+
             if (existingComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
