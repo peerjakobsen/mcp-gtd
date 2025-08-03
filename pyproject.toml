@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gtd-manager"
-version = "0.1.0"
+version = "1.0.0"
 description = "A Model Context Protocol (MCP) server for Getting Things Done task management"
 readme = "README.md"
 license = {text = "CC-BY-NC-4.0"}
