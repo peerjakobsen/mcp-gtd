@@ -1,6 +1,7 @@
 # Suggested Commands
 
 ## Environment Setup
+
 ```bash
 # Install dependencies (development mode)
 uv sync
@@ -13,6 +14,7 @@ uv run pre-commit install
 ```
 
 ## Development Commands
+
 ```bash
 # Run the MCP server locally
 uv run gtd-manager
@@ -22,6 +24,7 @@ uv run python -m gtd_manager.server
 ```
 
 ## Testing
+
 ```bash
 # Run all tests
 uv run pytest
@@ -37,6 +40,7 @@ uv run pytest --cov=gtd_manager --cov-report=term-missing --cov-report=html
 ```
 
 ## Code Quality
+
 ```bash
 # Format code with ruff
 uv run ruff format .
@@ -55,6 +59,7 @@ uv run pre-commit run --all-files
 ```
 
 ## Database Operations (Planned)
+
 ```bash
 # Set up database (when implemented)
 docker compose up -d postgres
@@ -67,6 +72,7 @@ uv run alembic revision --autogenerate -m "Description"
 ```
 
 ## System Utilities (Darwin/macOS)
+
 ```bash
 # List files
 ls -la
@@ -88,6 +94,7 @@ git push origin main
 ```
 
 ## Package Management
+
 ```bash
 # Add new dependency
 uv add package-name

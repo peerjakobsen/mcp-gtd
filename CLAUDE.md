@@ -17,6 +17,7 @@ This is a Model Context Protocol (MCP) server for Getting Things Done (GTD) task
 ## Development Commands
 
 ### Environment Setup
+
 ```bash
 # Install dependencies (development mode)
 uv sync
@@ -26,6 +27,7 @@ uv sync --group dev
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 uv run pytest
@@ -38,6 +40,7 @@ uv run pytest tests/test_package_structure.py
 ```
 
 ### Code Quality
+
 ```bash
 # Format and lint with ruff
 uv run ruff format .
@@ -48,6 +51,7 @@ uv run mypy src/
 ```
 
 ### Running the Server
+
 ```bash
 # Run MCP server locally
 uv run gtd-manager
@@ -85,6 +89,7 @@ uv run python -m gtd_manager.server
 ## Current Implementation Status
 
 The codebase is in early development with:
+
 - ✅ Basic FastMCP server setup
 - ✅ Package structure and build configuration
 - ✅ MCP protocol compliance (stderr logging)
@@ -99,34 +104,40 @@ The codebase is in early development with:
 **Critical guidance to avoid repeating common mistakes encountered during development.**
 
 ### TDD Discipline
+
 - **Always write tests first** when implementing new features or functionality
 - Follow strict red-green-refactor cycle: write failing test → implement code → refactor
 - If user mentions TDD or asks about tests, write tests before implementation
 - Don't implement features before seeing tests fail - this prevents proper TDD workflow
 
 ### FastMCP Testing Best Practices
+
 - **Use `Client(server)` pattern** for in-memory testing of FastMCP servers
 - Never try to access FastMCP server internals directly (avoid `server.list_tools()`, `server.get_tools()`)
 - All MCP tool testing should go through proper FastMCP Client API
 - Example correct pattern:
+
   ```python
   async with Client(server) as client:
       result = await client.call_tool("tool_name", {"param": "value"})
   ```
 
 ### External Library Integration
+
 - **Consult Context7 documentation** before making assumptions about API usage
 - When working with FastMCP, research proper patterns rather than guessing
 - If struggling with library usage, explicitly research correct patterns using available documentation tools
 - "Think hard" and look up authoritative examples before implementing
 
 ### Python Development Environment
+
 - **Use `PYTHONPATH=src`** during development testing to handle package imports
 - Understanding package import structure is critical for both development and production
 - Handle async testing properly with `asyncio.run()` and `async with` patterns
 - MCP servers are async by nature - all testing must follow async patterns
 
 ### MCP Protocol Critical Compliance Rules
+
 - **Stdout contamination breaks MCP** - JSON-RPC communication relies on clean stdout
 - All logging must go to stderr only (already configured with structlog)
 - Always verify stdout cleanliness in protocol compliance tests
@@ -134,7 +145,8 @@ The codebase is in early development with:
 - Test stdout cleanliness rigorously with captured stdout/stderr in tests
 
 ### Testing Development Flow
-- Run tests with: `PYTHONPATH=src uv run pytest tests/ -v`  
+
+- Run tests with: `PYTHONPATH=src uv run pytest tests/ -v`
 - Focus on protocol compliance tests for MCP servers
 - Maintain high test coverage but prioritize critical MCP compliance tests
 - Use proper FastMCP testing patterns to avoid false negatives

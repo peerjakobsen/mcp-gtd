@@ -39,7 +39,7 @@ logger = structlog.get_logger(__name__)
 server: FastMCP = FastMCP("gtd-manager")
 
 
-@server.tool()
+@server.tool()  # type: ignore[misc]
 def hello_world(name: str = "World") -> str:
     """
     A simple hello world tool for testing MCP connectivity.

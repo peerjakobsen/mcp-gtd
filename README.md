@@ -16,23 +16,27 @@ GTD Manager is a Model Context Protocol (MCP) server that implements Getting Thi
 ## Key Features
 
 ### Core GTD Workflow
+
 - **Universal Capture**: Add items from any MCP-enabled AI assistant
 - **Smart Clarification**: Process inbox items into actionable projects and tasks
 - **Context Organization**: GTD contexts optimized for knowledge work
 - **Comprehensive Reviews**: Daily and weekly review workflows
 
 ### Meeting Management
+
 - **Custom SOPs**: Create markdown templates for different meeting types
 - **Action Extraction**: Automatically identify and track action items from notes
 - **Stakeholder Tracking**: Maintain relationships and context over time
 - **Pre-meeting Preparation**: Automated checklists based on meeting type
 
 ### Flexible Storage
+
 - **Quip Integration**: Full CRUD operations via Quip API
 - **Local Markdown**: File-based storage with frontmatter metadata
 - **Hybrid Approach**: Mix and match storage backends per workflow
 
 ### AI Assistant Integration
+
 - **MCP Protocol**: Native integration with Claude Desktop, Cursor, and other MCP clients
 - **Natural Language**: Capture and process items using conversational commands
 - **Zero Context Switching**: Manage tasks without leaving your development environment
@@ -115,24 +119,28 @@ Add to your Claude Desktop configuration:
 ### Basic Workflow
 
 1. **Capture Everything**
+
    ```
    @gtd capture "Follow up with Sarah about project timeline"
    @gtd quick-capture "Buy birthday gift for Mom"
    ```
 
 2. **Process Your Inbox**
+
    ```
    @gtd inbox-review
    @gtd clarify-item "Follow up with Sarah about project timeline"
    ```
 
 3. **Organize by Context**
+
    ```
    @gtd next-actions @computer
    @gtd next-actions @meeting
    ```
 
 4. **Review and Plan**
+
    ```
    @gtd daily-review
    @gtd weekly-review
@@ -231,6 +239,7 @@ uv run alembic downgrade -1
 ### Quip Integration
 
 When configured with a Quip API token, the system can:
+
 - Create and update documents for projects and meeting notes
 - Sync action items between GTD system and Quip documents
 - Maintain folder structure aligned with GTD contexts
@@ -238,6 +247,7 @@ When configured with a Quip API token, the system can:
 ### Local Markdown
 
 Files are stored in a structured directory:
+
 ```
 ~/.gtd-manager/
 ├── inbox/
@@ -255,21 +265,23 @@ Files are stored in a structured directory:
 This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
 
 **You are free to:**
+
 - Use this software for personal, educational, and non-commercial purposes
 - Study and learn from the source code
 - Modify and create derivative works for non-commercial use
 
 **You may not:**
+
 - Use this software for commercial purposes without explicit permission
 - Sell or monetize this software or derivative works
 
-For commercial licensing inquiries, please contact: support@gtdmanager.dev
+For commercial licensing inquiries, please contact: <support@gtdmanager.dev>
 
-See the [LICENSE](LICENSE) file for full details or visit: https://creativecommons.org/licenses/by-nc/4.0/
+See the [LICENSE](LICENSE) file for full details or visit: <https://creativecommons.org/licenses/by-nc/4.0/>
 
 ## Support
 
-For questions or issues, contact: peer.jakobsen@gmail.com
+For questions or issues, contact: <peer.jakobsen@gmail.com>
 
 ---
 

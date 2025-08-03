@@ -9,12 +9,12 @@ description = "A Model Context Protocol (MCP) server for Getting Things Done tas
 readme = "README.md"
 license = {text = "CC-BY-NC-4.0"}
 authors = [
-    {name = "GTD Manager Team", email = "support@gtdmanager.dev"}
+    {name = "Peer Jakobsen", email = "peer.jakobsen@gmail.com"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
     "Topic :: Office/Business :: Scheduling",
@@ -142,4 +142,9 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
+]
+
+[dependency-groups]
+dev = [
+    "detect-secrets>=1.5.0",
 ]

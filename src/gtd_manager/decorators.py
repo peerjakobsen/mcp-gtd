@@ -16,7 +16,7 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 
-def preprocess_params(func: Callable) -> Callable:
+def preprocess_params(func: Callable[..., Any]) -> Callable[..., Any]:
     """
     Handle MCP parameter serialization issues.
 
@@ -77,7 +77,7 @@ def preprocess_params(func: Callable) -> Callable:
     return wrapper
 
 
-def mcp_tool(func: Callable) -> Callable:
+def mcp_tool(func: Callable[..., Any]) -> Callable[..., Any]:
     """
     Comprehensive decorator for MCP tools.
 

@@ -36,6 +36,7 @@ Team leads and managers face extreme context switching with 15-20 meetings per w
 ### Rationale
 
 Chose a generalized MCP server approach because:
+
 - Enables natural language interaction through AI assistants
 - SOP-driven customization provides flexibility without complexity
 - GTD methodology provides proven productivity framework
@@ -44,12 +45,14 @@ Chose a generalized MCP server approach because:
 ### Consequences
 
 **Positive:**
+
 - Seamless integration with AI coding assistants
 - Infinitely customizable through markdown SOPs
 - Follows established GTD best practices
 - No context switching from development environment
 
 **Negative:**
+
 - Requires users to write their own SOPs (mitigated by templates)
 - Limited to MCP-compatible clients initially
 - No traditional GUI (by design)
@@ -93,12 +96,14 @@ Need a modern, flexible tech stack that supports rapid development, handles semi
 ### Consequences
 
 **Positive:**
+
 - Rapid development with familiar Python ecosystem
 - Flexible data modeling with JSONB
 - Strong ACID guarantees for data integrity
 - Future-proof with latest Python version
 
 **Negative:**
+
 - Requires PostgreSQL setup (mitigated by Docker)
 - Python 3.13 is bleeding edge (but stable)
 
@@ -142,12 +147,14 @@ Users need to customize the system for their specific organizational processes w
 ### Consequences
 
 **Positive:**
+
 - Users can customize without programming knowledge
 - SOPs are self-documenting
 - Easy to share and version control
 - Clear separation of configuration from code
 
 **Negative:**
+
 - Parsing complexity for advanced features
 - Limited to markdown expressiveness
 - Users must learn frontmatter format (mitigated by templates)
@@ -188,12 +195,14 @@ Initially planned to use Black for formatting and Ruff for linting, but Ruff now
 ### Consequences
 
 **Positive:**
+
 - Faster code quality checks (important in pre-commit hooks)
 - Simplified development workflow with single tool
 - Fewer dependencies to manage and update
 - Consistent tool chain reduces configuration conflicts
 
 **Negative:**
+
 - Ruff format is newer and less battle-tested than Black
 - Team needs to learn new command (`ruff format` vs `black .`)
 
@@ -219,7 +228,7 @@ During implementation of the MCP protocol compliance foundation (Task 2), severa
    - Never access FastMCP server internals directly (`server.list_tools()`, `server.get_tools()`)
    - All MCP tool testing must go through proper FastMCP Client API
 
-2. **TDD Discipline** 
+2. **TDD Discipline**
    - Write tests first when implementing new features
    - Follow strict red-green-refactor cycle
    - See tests fail before implementing functionality
@@ -242,6 +251,7 @@ During implementation of the MCP protocol compliance foundation (Task 2), severa
 ### Rationale
 
 These practices emerged from actual development experience where:
+
 - FastMCP testing initially failed due to incorrect API usage patterns
 - TDD discipline was broken, leading to implementation-first approach
 - MCP protocol compliance required specific testing patterns not obvious from documentation
@@ -250,12 +260,14 @@ These practices emerged from actual development experience where:
 ### Consequences
 
 **Positive:**
+
 - Prevents repeating costly trial-and-error development cycles
 - Ensures MCP protocol compliance from the start
 - Maintains consistent code quality across team and AI assistants
 - Reduces debugging time by following proven patterns
 
 **Negative:**
+
 - Requires learning specific FastMCP patterns that may not be intuitive
 - TDD discipline requires more upfront planning
 - Additional testing setup complexity with async patterns

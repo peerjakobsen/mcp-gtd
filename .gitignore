@@ -264,6 +264,13 @@ htmlcov/
 # MCP server specific
 mcp_server.log
 mcp_debug.log
+mcp-*.log
+*.mcp.log
+
+# MCP development and testing artifacts
+mcp_client_test.json
+mcp_server_config.json
+mcp_tools_test.json
 
 # Temporary markdown files
 *.tmp.md
@@ -272,3 +279,53 @@ mcp_debug.log
 # User-specific SOP files (these should be in user config)
 user_sops/
 personal_sops/
+
+# GitHub Actions and CI/CD artifacts
+bandit-report.json
+security-report.json
+codeql-results/
+.secrets.baseline
+node_modules/
+
+# Pre-commit
+.pre-commit-cache/
+
+# Ruff cache (already present but being explicit)
+.ruff_cache/
+
+# uv specific (modern Python package manager)
+.uv_cache/
+uv.lock.backup
+
+# Release artifacts and temporary files
+release_notes.md
+release_notes.txt
+changelog_temp.md
+
+# Development database files for MCP testing
+test.db
+test.sqlite
+mcp_test.db
+
+# IDE and editor temporary files
+*.swp
+*.swo
+*~
+.#*
+
+# Local configuration overrides
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.local.json
+settings.local.json
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Profiling output
+*.prof
+*.pstats

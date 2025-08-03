@@ -79,6 +79,7 @@ def main() -> None:
 ```
 
 **MyPy Configuration Enforces:**
+
 - `disallow_untyped_defs = true` - All functions must have type annotations
 - `disallow_incomplete_defs = true` - Type annotations must be complete
 - `warn_return_any = true` - Warns about Any return types

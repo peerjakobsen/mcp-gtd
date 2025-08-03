@@ -199,7 +199,7 @@ def handle_generic_error(error: Exception, tool_name: str) -> dict[str, Any]:
     )
 
 
-def safe_tool_execution(func: Callable) -> Callable:
+def safe_tool_execution(func: Callable[..., Any]) -> Callable[..., Any]:
     """
     Decorator for comprehensive error handling across all MCP tools.
 

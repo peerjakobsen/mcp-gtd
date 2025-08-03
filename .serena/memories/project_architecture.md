@@ -1,6 +1,7 @@
 # Project Architecture
 
 ## Current Structure
+
 ```
 mcp-gtd/
 ├── src/gtd_manager/
@@ -20,6 +21,7 @@ mcp-gtd/
 ```
 
 ## Planned Architecture (from README)
+
 ```
 gtd-manager-mcp/
 ├── src/gtd_manager/
@@ -37,24 +39,28 @@ gtd-manager-mcp/
 ## Key Components
 
 ### FastMCP Server (`server.py`)
+
 - Main entry point for MCP protocol
 - Configured with structured logging to stderr
 - Currently implements hello_world tool for testing
 - Proper MCP protocol compliance
 
 ### Package Configuration (`pyproject.toml`)
+
 - Hatchling build backend
 - Console script entry point: `gtd-manager`
 - Comprehensive tool configuration (ruff, mypy, pytest)
 - Development dependencies clearly separated
 
 ### Testing Framework
+
 - pytest with coverage reporting
 - Package structure validation tests
 - Configured for strict test execution
 - Coverage reports in multiple formats
 
 ### Code Quality Pipeline
+
 - Pre-commit hooks for automated quality checks
 - Ruff for formatting and linting
 - MyPy for static type checking
@@ -64,18 +70,21 @@ gtd-manager-mcp/
 ## Design Patterns
 
 ### MCP Protocol Compliance
+
 - All logging directed to stderr
 - JSON-RPC communication over stdout
 - Tool functions return structured data
 - Proper error handling for MCP clients
 
 ### Structured Logging
+
 - JSON-formatted logs for better parsing
 - Contextual information in log entries
 - ISO timestamp formatting
 - Logger factory pattern with caching
 
 ### Package Organization
+
 - Standard src layout for clean imports
 - Clear separation of concerns (planned)
 - Domain-driven design approach (planned)

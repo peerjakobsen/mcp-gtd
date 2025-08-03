@@ -1,0 +1,235 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# Cancel in-progress runs for the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quick-check:
+    name: Quick Quality Check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run Ruff linting (with fixes)
+        run: uv run ruff check . --fix --exit-zero
+
+      - name: Run Ruff formatting
+        run: uv run ruff format .
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit formatting fixes
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "style: auto-fix formatting and linting issues"
+          git push
+
+      - name: Run mypy type checking
+        run: uv run mypy src/
+
+  test:
+    name: Fast Test Suite
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run unit tests only
+        run: uv run pytest -m "not integration and not slow" --cov=gtd_manager --cov-report=term-missing
+        env:
+          PYTHONPATH: src
+
+      - name: Test MCP protocol compliance
+        run: |
+          uv run python -c "
+          import sys
+          from io import StringIO
+          
+          old_stdout, old_stderr = sys.stdout, sys.stderr
+          captured_stdout = StringIO()
+          captured_stderr = StringIO()
+          
+          try:
+              sys.stdout = captured_stdout
+              sys.stderr = captured_stderr
+              
+              from gtd_manager.server import create_server
+              server = create_server()
+              
+              stdout_content = captured_stdout.getvalue()
+              if stdout_content:
+                  print('❌ MCP protocol violation: stdout contaminated', file=sys.__stderr__)
+                  sys.exit(1)
+              else:
+                  print('✅ MCP protocol compliance verified', file=sys.__stderr__)
+                  
+          finally:
+              sys.stdout = old_stdout
+              sys.stderr = old_stderr
+          "
+        env:
+          PYTHONPATH: src
+
+  build:
+    name: Test Build
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Test package build
+        run: uv build
+
+      - name: Test installation
+        run: |
+          uv pip install dist/*.whl
+          gtd-manager --help || echo "Installation test completed"
+
+  security:
+    name: Security Check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run bandit security check
+        run: uv run bandit -r src/ -f json -o bandit-report.json
+        continue-on-error: true
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-security-report-${{ github.event.pull_request.number }}
+          path: bandit-report.json
+
+  pr-comment:
+    name: PR Status Comment
+    runs-on: ubuntu-latest
+    needs: [quick-check, test, build, security]
+    if: always() && github.event.pull_request.draft == false
+    
+    steps:
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = {
+              'quick-check': '${{ needs.quick-check.result }}',
+              'test': '${{ needs.test.result }}',
+              'build': '${{ needs.build.result }}',
+              'security': '${{ needs.security.result }}'
+            };
+            
+            const passed = Object.values(results).filter(r => r === 'success').length;
+            const total = Object.keys(results).length;
+            
+            let comment = `## PR Check Results\n\n`;
+            comment += `✅ **${passed}/${total}** checks passed\n\n`;
+            
+            for (const [job, result] of Object.entries(results)) {
+              const emoji = result === 'success' ? '✅' : result === 'failure' ? '❌' : '⚠️';
+              comment += `${emoji} **${job}**: ${result}\n`;
+            }
+            
+            if (passed === total) {
+              comment += `\n🚀 All checks passed! Ready for review.`;
+            } else {
+              comment += `\n🔍 Some checks failed. Please review and fix issues.`;
+            }
+            
+            // Find existing comment to update or create new one
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const existingComment = comments.find(c => 
+              c.user.type === 'Bot' && c.body.includes('PR Check Results')
+            );
+            
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
