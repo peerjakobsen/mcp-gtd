@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   quick-check:
     name: Quick Quality Check
@@ -182,55 +186,63 @@ jobs:
     steps:
       - name: Comment PR
         uses: actions/github-script@v7
+        continue-on-error: true
         with:
           script: |
-            const results = {
-              'quick-check': '${{ needs.quick-check.result }}',
-              'test': '${{ needs.test.result }}',
-              'build': '${{ needs.build.result }}',
-              'security': '${{ needs.security.result }}'
-            };
+            try {
+              const results = {
+                'quick-check': '${{ needs.quick-check.result }}',
+                'test': '${{ needs.test.result }}',
+                'build': '${{ needs.build.result }}',
+                'security': '${{ needs.security.result }}'
+              };
 
-            const passed = Object.values(results).filter(r => r === 'success').length;
-            const total = Object.keys(results).length;
+              const passed = Object.values(results).filter(r => r === 'success').length;
+              const total = Object.keys(results).length;
 
-            let comment = `## PR Check Results\n\n`;
-            comment += `✅ **${passed}/${total}** checks passed\n\n`;
+              let comment = `## PR Check Results\n\n`;
+              comment += `✅ **${passed}/${total}** checks passed\n\n`;
 
-            for (const [job, result] of Object.entries(results)) {
-              const emoji = result === 'success' ? '✅' : result === 'failure' ? '❌' : '⚠️';
-              comment += `${emoji} **${job}**: ${result}\n`;
-            }
+              for (const [job, result] of Object.entries(results)) {
+                const emoji = result === 'success' ? '✅' : result === 'failure' ? '❌' : '⚠️';
+                comment += `${emoji} **${job}**: ${result}\n`;
+              }
 
-            if (passed === total) {
-              comment += `\n🚀 All checks passed! Ready for review.`;
-            } else {
-              comment += `\n🔍 Some checks failed. Please review and fix issues.`;
-            }
+              if (passed === total) {
+                comment += `\n🚀 All checks passed! Ready for review.`;
+              } else {
+                comment += `\n🔍 Some checks failed. Please review and fix issues.`;
+              }
 
-            // Find existing comment to update or create new one
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const existingComment = comments.find(c =>
-              c.user.type === 'Bot' && c.body.includes('PR Check Results')
-            );
-
-            if (existingComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existingComment.id,
-                body: comment
-              });
-            } else {
-              await github.rest.issues.createComment({
+              // Find existing comment to update or create new one
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: comment
               });
+
+              const existingComment = comments.find(c =>
+                c.user.type === 'Bot' && c.body.includes('PR Check Results')
+              );
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existingComment.id,
+                  body: comment
+                });
+                console.log('✅ Updated existing PR comment');
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: comment
+                });
+                console.log('✅ Created new PR comment');
+              }
+            } catch (error) {
+              console.log('⚠️ Failed to post PR comment (likely due to permissions):', error.message);
+              console.log('🔍 Check results can still be viewed in the Actions tab');
             }
