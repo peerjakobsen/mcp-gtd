@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies for analysis
         run: |
-          uv sync --all-groups
+          uv sync --extra dev
           # Install the package in development mode for CodeQL analysis
           uv pip install -e .
         env:

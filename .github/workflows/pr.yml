@@ -28,7 +28,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run Ruff linting (with fixes)
         run: uv run ruff check . --fix --exit-zero
@@ -75,7 +75,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run unit tests only
         run: uv run pytest -m "not integration and not slow" --cov=gtd_manager --cov-report=term-missing
@@ -131,7 +131,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Test package build
         run: uv build
@@ -159,7 +159,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run bandit security check
         run: uv run bandit -r src/ -f json -o bandit-report.json
