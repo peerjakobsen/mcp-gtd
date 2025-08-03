@@ -151,3 +151,48 @@ Users need to customize the system for their specific organizational processes w
 - Parsing complexity for advanced features
 - Limited to markdown expressiveness
 - Users must learn frontmatter format (mitigated by templates)
+
+## 2025-08-03: Code Formatting Tool Selection
+
+**ID:** DEC-004
+**Status:** Accepted
+**Category:** Technical
+**Stakeholders:** Development Team
+
+### Decision
+
+Use Ruff for both linting and code formatting instead of separate Black + Ruff tools.
+
+### Context
+
+Initially planned to use Black for formatting and Ruff for linting, but Ruff now provides formatting capabilities that are compatible with Black's output while offering better performance.
+
+### Alternatives Considered
+
+1. **Black + Ruff (separate tools)**
+   - Pros: Mature, well-established Black formatting
+   - Cons: Two tools to maintain, potential conflicts, slower execution
+
+2. **Only Black for formatting**
+   - Pros: Most mature Python formatter
+   - Cons: Doesn't handle linting, need additional tools
+
+### Rationale
+
+- Ruff format is significantly faster (written in Rust vs Python)
+- Unified tooling reduces complexity and potential conflicts
+- Compatible with Black's formatting style - no code changes needed
+- Reduces dependencies and tool chain complexity
+- Single tool for linting, import sorting, and formatting
+
+### Consequences
+
+**Positive:**
+- Faster code quality checks (important in pre-commit hooks)
+- Simplified development workflow with single tool
+- Fewer dependencies to manage and update
+- Consistent tool chain reduces configuration conflicts
+
+**Negative:**
+- Ruff format is newer and less battle-tested than Black
+- Team needs to learn new command (`ruff format` vs `black .`)

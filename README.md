@@ -5,7 +5,7 @@
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![MCP Protocol](https://img.shields.io/badge/MCP-1.0+-green.svg)](https://modelcontextprotocol.io/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-latest-orange.svg)](https://github.com/jlowin/fastmcp)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 ## Overview
 
@@ -252,7 +252,20 @@ Files are stored in a structured directory:
 
 ## License
 
-MIT License - This is a personal productivity tool by Peer Jakobsen.
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+
+**You are free to:**
+- Use this software for personal, educational, and non-commercial purposes
+- Study and learn from the source code
+- Modify and create derivative works for non-commercial use
+
+**You may not:**
+- Use this software for commercial purposes without explicit permission
+- Sell or monetize this software or derivative works
+
+For commercial licensing inquiries, please contact: support@gtdmanager.dev
+
+See the [LICENSE](LICENSE) file for full details or visit: https://creativecommons.org/licenses/by-nc/4.0/
 
 ## Support
 
