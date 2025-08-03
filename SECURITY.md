@@ -13,7 +13,7 @@ We take the security of GTD Manager MCP Server seriously. If you discover a secu
 
 ### Where to Report
 
-Please report security vulnerabilities by emailing **peer.jakobsen@gmail.com** with:
+Please report security vulnerabilities by emailing **<peer.jakobsen@gmail.com>** with:
 
 - A clear description of the vulnerability
 - Steps to reproduce the issue
@@ -38,14 +38,16 @@ We follow responsible disclosure practices:
 ### Security Considerations
 
 This MCP server:
+
 - Operates over stdio using JSON-RPC protocol
-- Has minimal external dependencies (FastMCP, structlog)  
+- Has minimal external dependencies (FastMCP, structlog)
 - Does not handle sensitive user data by default
 - Logs to stderr only to maintain MCP protocol compliance
 
 ### Scope
 
 This security policy applies to:
+
 - The main GTD Manager MCP Server codebase
 - Published releases on PyPI
 - Official GitHub Actions workflows

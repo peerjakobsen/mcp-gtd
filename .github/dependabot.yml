@@ -26,7 +26,7 @@ updates:
         patterns:
           - "fastmcp*"
           - "structlog*"
-      # Group development dependencies  
+      # Group development dependencies
       development-dependencies:
         patterns:
           - "pytest*"

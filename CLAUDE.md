@@ -154,8 +154,9 @@ The codebase is in early development with:
 When implementing GTD features, follow the MCP server patterns established in `server.py` and maintain strict MCP protocol compliance.
 
 ### GitHub Actions & Release Workflow
+
 - **CI runs on ALL branches** - test locally first with `act -j quality` or `act -j test`
-- **Conventional commits for auto-versioning**: `fix:` → patch, `feat:` → minor, `BREAKING CHANGE:` → major  
+- **Conventional commits for auto-versioning**: `fix:` → patch, `feat:` → minor, `BREAKING CHANGE:` → major
 - **Two-stage releases**: Main merge → version bump + tag | Manual tag push → PyPI publish
 - **Never manually edit version** in pyproject.toml (managed by semantic-release)
 - **PyPI publishing**: `git push origin v1.2.0` or `gh release create v1.2.0`
