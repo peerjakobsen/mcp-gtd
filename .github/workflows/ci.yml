@@ -84,7 +84,6 @@ jobs:
         run: |
           uv run python -c "
           import sys
-          import subprocess
           from io import StringIO
           
           # Capture stdout and stderr separately
@@ -96,13 +95,12 @@ jobs:
               sys.stdout = captured_stdout
               sys.stderr = captured_stderr
               
-              # Import server creation - this should not contaminate stdout
-              from gtd_manager.server import create_server
-              server = create_server()
+              # Import server instance - this should not contaminate stdout
+              from gtd_manager.server import server
               
               stdout_content = captured_stdout.getvalue()
               if stdout_content:
-                  print('ERROR: Server creation contaminated stdout: ' + repr(stdout_content), file=sys.__stderr__)
+                  print('ERROR: Server import contaminated stdout: ' + repr(stdout_content), file=sys.__stderr__)
                   sys.exit(1)
               else:
                   print('✓ MCP protocol compliance verified: stdout clean', file=sys.__stderr__)

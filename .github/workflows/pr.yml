@@ -96,8 +96,7 @@ jobs:
               sys.stdout = captured_stdout
               sys.stderr = captured_stderr
               
-              from gtd_manager.server import create_server
-              server = create_server()
+              from gtd_manager.server import server
               
               stdout_content = captured_stdout.getvalue()
               if stdout_content:
