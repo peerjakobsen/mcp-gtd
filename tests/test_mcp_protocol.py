@@ -173,7 +173,7 @@ print(f"stderr_handlers:{stderr_handlers},other_handlers:{other_handlers}")
         # Skip test on Windows if there are environment socket issues
         if result.returncode != 0 and "WinError 10106" in result.stderr:
             pytest.skip("Windows socket provider issue - not related to our code")
-        
+
         assert result.returncode == 0, f"Subprocess failed: {result.stderr}"
 
         # Parse output
