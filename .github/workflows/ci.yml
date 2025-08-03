@@ -23,7 +23,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --all-groups
 
       - name: Run Ruff linting
         run: uv run ruff check .
@@ -65,7 +65,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --all-groups
 
       - name: Run tests with coverage
         run: uv run pytest --cov=gtd_manager --cov-report=xml --cov-report=term-missing
@@ -132,7 +132,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --all-groups
 
       - name: Build package
         run: uv build
@@ -166,7 +166,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --all-groups
 
       - name: Test FastMCP server startup
         run: |
