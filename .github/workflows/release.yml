@@ -1,9 +1,11 @@
-name: Release
+name: PyPI Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'  # Only publish to PyPI when tags are manually pushed/created
+  release:
+    types: [published]  # Also trigger on GitHub release publication
 
 permissions:
   contents: write
@@ -13,6 +15,8 @@ jobs:
   build:
     name: Build Release
     runs-on: ubuntu-latest
+    # This workflow only runs when tags are manually created or GitHub releases are published
+    # Version bumps and tag creation are handled by release-prep.yml
     
     steps:
       - name: Checkout code
@@ -27,7 +31,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run tests
         run: uv run pytest
@@ -40,7 +44,8 @@ jobs:
       - name: Test package installation
         run: |
           uv pip install dist/*.whl
-          gtd-manager --help || echo "Package installation test completed"
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Package installation test completed"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

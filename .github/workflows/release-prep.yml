@@ -1,0 +1,63 @@
+name: Release Preparation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual triggers
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-prep:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Run Python Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run semantic-release version --print
+          
+          # Check if a new version was created
+          if uv run semantic-release version --print --no-commit --no-tag --no-push | grep -q "No release will be made"; then
+            echo "No new version needed based on commit messages"
+            exit 0
+          fi
+          
+          # Create version bump, tag, and changelog
+          uv run semantic-release version
+          
+          echo "Release preparation completed!"
+          echo "New version tag created and ready for manual PyPI publishing"
+
+      - name: Output release info
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "No tags found")
+          echo "Latest tag: $LATEST_TAG"
+          echo "To publish to PyPI, manually create a GitHub release or push the tag"

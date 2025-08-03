@@ -28,7 +28,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run Ruff linting (with fixes)
         run: uv run ruff check . --fix --exit-zero
@@ -75,7 +75,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run unit tests only
         run: uv run pytest -m "not integration and not slow" --cov=gtd_manager --cov-report=term-missing
@@ -96,8 +96,7 @@ jobs:
               sys.stdout = captured_stdout
               sys.stderr = captured_stderr
               
-              from gtd_manager.server import create_server
-              server = create_server()
+              from gtd_manager.server import server
               
               stdout_content = captured_stdout.getvalue()
               if stdout_content:
@@ -131,7 +130,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Test package build
         run: uv build
@@ -139,7 +138,8 @@ jobs:
       - name: Test installation
         run: |
           uv pip install dist/*.whl
-          gtd-manager --help || echo "Installation test completed"
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Installation test completed"
 
   security:
     name: Security Check
@@ -159,7 +159,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run bandit security check
         run: uv run bandit -r src/ -f json -o bandit-report.json

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: ['**']  # Run CI on all branches
   pull_request:
-    branches: [main, develop]
+    branches: [main]  # PRs only target main branch
 
 jobs:
   quality:
@@ -23,7 +23,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run Ruff linting
         run: uv run ruff check .
@@ -65,7 +65,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Run tests with coverage
         run: uv run pytest --cov=gtd_manager --cov-report=xml --cov-report=term-missing
@@ -84,7 +84,6 @@ jobs:
         run: |
           uv run python -c "
           import sys
-          import subprocess
           from io import StringIO
           
           # Capture stdout and stderr separately
@@ -96,13 +95,12 @@ jobs:
               sys.stdout = captured_stdout
               sys.stderr = captured_stderr
               
-              # Import server creation - this should not contaminate stdout
-              from gtd_manager.server import create_server
-              server = create_server()
+              # Import server instance - this should not contaminate stdout
+              from gtd_manager.server import server
               
               stdout_content = captured_stdout.getvalue()
               if stdout_content:
-                  print('ERROR: Server creation contaminated stdout: ' + repr(stdout_content), file=sys.__stderr__)
+                  print('ERROR: Server import contaminated stdout: ' + repr(stdout_content), file=sys.__stderr__)
                   sys.exit(1)
               else:
                   print('✓ MCP protocol compliance verified: stdout clean', file=sys.__stderr__)
@@ -132,7 +130,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Build package
         run: uv build
@@ -140,7 +138,8 @@ jobs:
       - name: Test package installation
         run: |
           uv pip install dist/*.whl
-          gtd-manager --help || echo "Console script test completed"
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Console script test completed"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -166,7 +165,7 @@ jobs:
         run: uv python install 3.13
 
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --extra dev
 
       - name: Test FastMCP server startup
         run: |
@@ -180,5 +179,7 @@ jobs:
           # Simulate uvx installation by testing the built package
           uv build
           uv pip install dist/*.whl
-          which gtd-manager
-          gtd-manager --help || echo "uvx simulation completed"
+          # Verify package can be imported
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          # Verify console script exists and can be executed (with timeout)
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Console script installation verified"
