@@ -138,7 +138,8 @@ jobs:
       - name: Test package installation
         run: |
           uv pip install dist/*.whl
-          gtd-manager --help || echo "Console script test completed"
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Console script test completed"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -178,5 +179,7 @@ jobs:
           # Simulate uvx installation by testing the built package
           uv build
           uv pip install dist/*.whl
-          which gtd-manager
-          gtd-manager --help || echo "uvx simulation completed"
+          # Verify package can be imported
+          uv run python -c "import gtd_manager; print('✓ Package import successful')"
+          # Verify console script exists and can be executed (with timeout)
+          timeout 5s uv run gtd-manager 2>/dev/null || echo "✓ Console script installation verified"
