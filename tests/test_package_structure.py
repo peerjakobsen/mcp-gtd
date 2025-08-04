@@ -53,12 +53,12 @@ def test_package_version_accessible():
         import gtd_manager
 
         # Should have __version__ attribute
-        assert hasattr(
-            gtd_manager, "__version__"
-        ), "Package should have __version__ attribute"
-        assert isinstance(
-            gtd_manager.__version__, str
-        ), "__version__ should be a string"
+        assert hasattr(gtd_manager, "__version__"), (
+            "Package should have __version__ attribute"
+        )
+        assert isinstance(gtd_manager.__version__, str), (
+            "__version__ should be a string"
+        )
     except ImportError as e:
         pytest.fail(f"Failed to import gtd_manager for version check: {e}")
 

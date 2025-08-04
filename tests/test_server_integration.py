@@ -82,9 +82,9 @@ class TestServerStartupAndCommunication:
 
             # Should never contaminate stdout
             stdout_content = captured_stdout.getvalue()
-            assert (
-                stdout_content == ""
-            ), f"Server contaminated stdout under load: {repr(stdout_content)}"
+            assert stdout_content == "", (
+                f"Server contaminated stdout under load: {repr(stdout_content)}"
+            )
 
     @pytest.mark.asyncio
     async def test_tool_registry_integration_end_to_end(self):
@@ -121,9 +121,9 @@ class TestServerStartupAndCommunication:
             import gtd_manager.server  # noqa: F401
 
             stdout_content = captured_stdout.getvalue()
-            assert (
-                stdout_content == ""
-            ), f"Server import contaminated stdout: {repr(stdout_content)}"
+            assert stdout_content == "", (
+                f"Server import contaminated stdout: {repr(stdout_content)}"
+            )
 
 
 class TestServerMainFunctionIntegration:

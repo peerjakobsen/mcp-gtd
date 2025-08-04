@@ -1892,9 +1892,9 @@ class TestDatabaseIndexes:
 
             # Check that the query plan mentions using the status index
             plan_text = " ".join([str(row) for row in query_plan])
-            assert (
-                "idx_gtd_items_status" in plan_text
-            ), f"Status index not used in query plan: {query_plan}"
+            assert "idx_gtd_items_status" in plan_text, (
+                f"Status index not used in query plan: {query_plan}"
+            )
 
     def test_query_performance_with_project_hierarchy_index(self, tmp_path):
         """Test that project hierarchy queries use the project_id index."""
@@ -1937,9 +1937,9 @@ class TestDatabaseIndexes:
 
             # Check that the query plan mentions using the project index
             plan_text = " ".join([str(row) for row in query_plan])
-            assert (
-                "idx_gtd_items_project" in plan_text
-            ), f"Project index not used in query plan: {query_plan}"
+            assert "idx_gtd_items_project" in plan_text, (
+                f"Project index not used in query plan: {query_plan}"
+            )
 
     def test_query_performance_with_date_range_index(self, tmp_path):
         """Test that date range queries use the created_at index."""
@@ -1984,6 +1984,6 @@ class TestDatabaseIndexes:
 
             # Check that the query plan mentions using the created_at index
             plan_text = " ".join([str(row) for row in query_plan])
-            assert (
-                "idx_gtd_items_created" in plan_text
-            ), f"Created_at index not used in query plan: {query_plan}"
+            assert "idx_gtd_items_created" in plan_text, (
+                f"Created_at index not used in query plan: {query_plan}"
+            )
