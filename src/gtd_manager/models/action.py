@@ -7,8 +7,12 @@ contexts, due dates, energy levels, and project relationships.
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from .base import GTDItem
+
+if TYPE_CHECKING:
+    from .context import Context
 
 
 @dataclass
@@ -31,7 +35,7 @@ class Action(GTDItem):
     project_id: str | None = None
     contexts: list["Context"] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization validation and setup."""
         super().__post_init__()
 

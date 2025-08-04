@@ -8,6 +8,10 @@ following GTD methodology (@computer, @phone, @errands, etc.).
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .action import Action
 
 
 @dataclass
@@ -32,7 +36,7 @@ class Context:
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     actions: list["Action"] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization validation."""
         # Validate context name follows GTD conventions
         if not self.name:

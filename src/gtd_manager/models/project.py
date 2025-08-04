@@ -6,9 +6,13 @@ with clear success criteria and collections of related actions.
 """
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any
 
 from .base import GTDItem
 from .enums import GTDStatus
+
+if TYPE_CHECKING:
+    from .action import Action
 
 
 @dataclass
@@ -28,7 +32,7 @@ class Project(GTDItem):
     success_criteria: str | None = None
     actions: list["Action"] = field(default_factory=list)
 
-    def __setattr__(self, name: str, value) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:
         """Override setattr to validate business rules."""
         # Validate that projects have success criteria when organized
         # Skip validation during initial dataclass construction
@@ -42,7 +46,7 @@ class Project(GTDItem):
 
         super().__setattr__(name, value)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization setup."""
         super().__post_init__()
         # Mark as initialized so validation can run

@@ -9,8 +9,14 @@ import re
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from .enums import OrganizationType
+
+if TYPE_CHECKING:
+    from .base import GTDItem
+    from .enums import RACIRole
+    from .relationships import GTDItemStakeholder
 
 
 @dataclass
@@ -154,7 +160,7 @@ class Stakeholder:
     team: Team | None = None
     gtd_items: list["GTDItemStakeholder"] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization validation."""
         # Validate email format using simple regex
         email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"

@@ -7,9 +7,13 @@ relationships between GTD entities, particularly the RACI stakeholder relationsh
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from .enums import RACIRole
+
+if TYPE_CHECKING:
+    from .base import GTDItem
+    from .stakeholder import Stakeholder
 
 # Global registry to track existing RACI relationships for validation
 _raci_relationships: list["GTDItemStakeholder"] = []
@@ -40,7 +44,7 @@ class GTDItemStakeholder:
     gtd_item: Optional["GTDItem"] = None
     stakeholder: Optional["Stakeholder"] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization validation and business rule enforcement."""
         # Enforce exactly one Accountable per GTD item
         if self.raci_role == RACIRole.ACCOUNTABLE:
@@ -61,7 +65,7 @@ class GTDItemStakeholder:
         # Add this relationship to the global registry
         _raci_relationships.append(self)
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Clean up when relationship is deleted."""
         if self in _raci_relationships:
             _raci_relationships.remove(self)
@@ -117,7 +121,7 @@ class GTDItemStakeholder:
         ]
 
     @classmethod
-    def clear_registry(cls):
+    def clear_registry(cls) -> None:
         """Clear the global registry (useful for testing)."""
         global _raci_relationships
         _raci_relationships.clear()

@@ -8,9 +8,12 @@ including support for RACI stakeholder relationships and automatic timestamp man
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from .enums import GTDStatus, RACIRole
+
+if TYPE_CHECKING:
+    from .stakeholder import Stakeholder
 
 
 @dataclass
@@ -39,13 +42,13 @@ class GTDItem:
     updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     completed_at: datetime | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization hook to handle status-dependent logic."""
         # Set completed_at if status is COMPLETE
         if self.status == GTDStatus.COMPLETE and self.completed_at is None:
             self.completed_at = datetime.now(UTC)
 
-    def __setattr__(self, name: str, value) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:
         """Override setattr to handle automatic timestamp updates."""
         # Update updated_at timestamp when any field changes (except timestamps)
         if hasattr(self, "updated_at") and name not in ("updated_at", "completed_at"):
