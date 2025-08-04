@@ -83,6 +83,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*" = ["ARG", "S101"]  # Allow unused args and asserts in tests
+"src/gtd_manager/models/**/*" = ["F821"]  # Allow forward references in domain models
 
 [tool.ruff.lint.isort]
 known-first-party = ["gtd_manager"]

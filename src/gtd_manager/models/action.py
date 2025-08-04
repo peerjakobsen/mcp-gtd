@@ -36,14 +36,10 @@ class Action(GTDItem):
         super().__post_init__()
 
         # Validate energy level if provided
-        if (
-            self.energy_level is not None
-            and (
-                not isinstance(self.energy_level, int)
-                or not (1 <= self.energy_level <= 5)
-            )
+        if self.energy_level is not None and (
+            not isinstance(self.energy_level, int) or not (1 <= self.energy_level <= 5)
         ):
-                raise ValueError("Energy level must be an integer between 1 and 5")
+            raise ValueError("Energy level must be an integer between 1 and 5")
 
     def add_context(self, context: "Context") -> None:
         """
