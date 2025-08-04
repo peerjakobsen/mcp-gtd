@@ -30,11 +30,11 @@
   - [x] 2.8 Add database indexes for common query patterns
   - [x] 2.9 Verify all database schema tests pass
 
-- [ ] 3. Integration & Data Layer
-  - [ ] 3.1 Write tests for domain model persistence with database operations
-  - [ ] 3.2 Implement repository pattern for domain model CRUD operations
-  - [ ] 3.3 Write tests for data validation and constraint enforcement
-  - [ ] 3.4 Add comprehensive data validation and error handling
-  - [ ] 3.5 Write tests for complex queries and relationships
-  - [ ] 3.6 Implement query methods for GTD workflow operations
-  - [ ] 3.7 Verify all integration tests pass with full test suite
+- [x] 3. Integration & Data Layer
+  - [x] 3.1 Write tests for domain model persistence with database operations
+  - [x] 3.2 Implement repository pattern for domain model CRUD operations
+  - [x] 3.3 Write tests for data validation and constraint enforcement
+  - [x] 3.4 Add comprehensive data validation and error handling
+  - [x] 3.5 Write tests for complex queries and relationships
+  - [x] 3.6 Implement query methods for GTD workflow operations
+  - [x] 3.7 Verify all integration tests pass with full test suite

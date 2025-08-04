@@ -28,6 +28,33 @@ class ParameterValidationError(ValueError):
         self.suggestions = suggestions or []
 
 
+# GTD-specific error classes for repository operations
+
+
+class GTDValidationError(ValueError):
+    """Raised when GTD domain validation rules are violated."""
+
+    pass
+
+
+class GTDNotFoundError(ValueError):
+    """Raised when requested GTD entity is not found."""
+
+    pass
+
+
+class GTDDuplicateError(ValueError):
+    """Raised when attempting to create duplicate GTD entity."""
+
+    pass
+
+
+class GTDDatabaseError(Exception):
+    """Raised when database operations fail due to constraints or integrity issues."""
+
+    pass
+
+
 def create_error_response(
     error_message: str,
     error_code: str,
