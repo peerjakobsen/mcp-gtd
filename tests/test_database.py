@@ -567,6 +567,504 @@ class TestMigrationSystem:
         assert risk_assessment.backup_recommended is True
 
 
+class TestMigrationOrchestration:
+    """Test high-level migration orchestration and discovery methods."""
+
+    def test_discover_migrations(self, tmp_path):
+        """Test automatic discovery of migration files."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "discovery_test.db"
+        manager = MigrationManager(db_path)
+
+        # Should discover the InitialSchemaMigration
+        available_migrations = manager.discover_migrations()
+
+        assert len(available_migrations) >= 1
+        assert 1 in available_migrations  # Version 1 should be available
+        assert hasattr(available_migrations[1], "upgrade")
+        assert hasattr(available_migrations[1], "downgrade")
+
+    def test_get_available_migrations(self, tmp_path):
+        """Test getting list of all available migrations."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "available_test.db"
+        manager = MigrationManager(db_path)
+
+        available = manager.get_available_migrations()
+
+        assert isinstance(available, dict)
+        assert 1 in available  # InitialSchemaMigration should be version 1
+        assert available[1].__class__.__name__ == "InitialSchemaMigration"
+
+    def test_get_pending_migrations(self, tmp_path):
+        """Test getting list of migrations that need to be applied."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "pending_test.db"
+        manager = MigrationManager(db_path)
+
+        # Before any migrations are applied
+        pending = manager.get_pending_migrations()
+        assert len(pending) >= 1
+        assert 1 in pending
+
+        # After applying initial migration
+        migration = pending[1]
+        manager.apply_migration(migration, target_version=1)
+
+        # Should have no pending migrations
+        pending_after = manager.get_pending_migrations()
+        assert len(pending_after) == 0
+
+    def test_get_migration_history(self, tmp_path):
+        """Test getting history of applied migrations."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "history_test.db"
+        manager = MigrationManager(db_path)
+
+        # Initially no history
+        history = manager.get_migration_history()
+        assert len(history) == 0
+
+        # Apply a migration
+        migration = InitialSchemaMigration()
+        manager.apply_migration(migration, target_version=1)
+
+        # Should now have history
+        history_after = manager.get_migration_history()
+        assert len(history_after) == 1
+        assert history_after[0]["version"] == 1
+        assert "applied_at" in history_after[0]
+        assert "name" in history_after[0]
+
+    def test_migrate_to_version(self, tmp_path):
+        """Test migrating to a specific version."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "version_test.db"
+        manager = MigrationManager(db_path)
+
+        # Should be at version 0 initially
+        assert manager.get_current_version() == 0
+
+        # Migrate to version 1
+        manager.migrate_to_version(1)
+        assert manager.get_current_version() == 1
+
+        # Verify schema was created
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='gtd_items'"
+            )
+            assert cursor.fetchone() is not None
+
+    def test_migrate_to_latest(self, tmp_path):
+        """Test migrating to the latest available version."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "latest_test.db"
+        manager = MigrationManager(db_path)
+
+        # Should be at version 0 initially
+        assert manager.get_current_version() == 0
+
+        # Migrate to latest
+        final_version = manager.migrate_to_latest()
+        assert final_version >= 1
+        assert manager.get_current_version() == final_version
+
+        # Should have no pending migrations
+        pending = manager.get_pending_migrations()
+        assert len(pending) == 0
+
+    def test_load_migration(self, tmp_path):
+        """Test loading a specific migration by version."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "load_test.db"
+        manager = MigrationManager(db_path)
+
+        # Load version 1 migration
+        migration = manager.load_migration(1)
+        assert migration is not None
+        assert hasattr(migration, "upgrade")
+        assert hasattr(migration, "downgrade")
+        assert hasattr(migration, "version")
+        assert migration.version == 1
+
+        # Try to load non-existent migration
+        with pytest.raises(ValueError):
+            manager.load_migration(999)
+
+    def test_validate_migration_sequence(self, tmp_path):
+        """Test validation of migration sequence integrity."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "sequence_test.db"
+        manager = MigrationManager(db_path)
+
+        # Should validate successfully with current migrations
+        is_valid = manager.validate_migration_sequence()
+        assert is_valid is True
+
+    def test_migrate_to_version_with_multiple_steps(self, tmp_path):
+        """Test migrating through multiple versions in sequence."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "multi_step_test.db"
+        manager = MigrationManager(db_path)
+
+        # For now we only have version 1, but test the framework
+        # In future when we have version 2, 3, etc., this will test multi-step migration
+        manager.migrate_to_version(1)
+        assert manager.get_current_version() == 1
+
+        # Test that migrating to current version is a no-op
+        manager.migrate_to_version(1)
+        assert manager.get_current_version() == 1
+
+    def test_migration_rollback_to_version(self, tmp_path):
+        """Test rolling back to a previous version."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "rollback_version_test.db"
+        manager = MigrationManager(db_path)
+
+        # Migrate up to version 1
+        manager.migrate_to_version(1)
+        assert manager.get_current_version() == 1
+
+        # Rollback to version 0
+        manager.migrate_to_version(0)
+        assert manager.get_current_version() == 0
+
+        # Verify tables were dropped
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='gtd_items'"
+            )
+            assert cursor.fetchone() is None
+
+
+class TestEnhancedSchemaVersioning:
+    """Test enhanced schema version tracking with metadata."""
+
+    def test_enhanced_schema_version_table_structure(self, tmp_path):
+        """Test that enhanced schema_version table has all required columns."""
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "enhanced_schema_test.db"
+        manager = MigrationManager(db_path)
+
+        # Initialize with enhanced schema
+        manager._init_enhanced_schema_version_table()
+
+        with sqlite3.connect(db_path) as conn:
+            # Check table structure
+            cursor = conn.execute("PRAGMA table_info(schema_version)")
+            columns = {row[1]: row[2] for row in cursor.fetchall()}
+
+            assert "version" in columns
+            assert "name" in columns
+            assert "checksum" in columns
+            assert "duration_ms" in columns
+            assert "applied_by" in columns
+            assert "applied_at" in columns
+
+    def test_migration_metadata_tracking(self, tmp_path):
+        """Test that migration metadata is properly tracked."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "metadata_test.db"
+        manager = MigrationManager(db_path)
+
+        # Apply migration with metadata tracking
+        migration = InitialSchemaMigration()
+        manager.apply_migration_with_metadata(migration, target_version=1)
+
+        # Check metadata was recorded
+        with sqlite3.connect(db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.execute("SELECT * FROM schema_version WHERE version = 1")
+            row = cursor.fetchone()
+
+            assert row is not None
+            assert row["version"] == 1
+            assert row["name"] == "InitialSchemaMigration"
+            assert row["checksum"] is not None
+            assert len(row["checksum"]) > 0
+            assert row["duration_ms"] >= 0
+            assert row["applied_by"] is not None
+            assert row["applied_at"] is not None
+
+    def test_migration_checksum_generation(self, tmp_path):
+        """Test that migration checksums are generated consistently."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "checksum_test.db"
+        manager = MigrationManager(db_path)
+
+        migration = InitialSchemaMigration()
+
+        # Generate checksum twice - should be identical
+        checksum1 = manager._generate_migration_checksum(migration)
+        checksum2 = manager._generate_migration_checksum(migration)
+
+        assert checksum1 == checksum2
+        assert len(checksum1) == 64  # SHA-256 hex digest length
+
+    def test_migration_duration_tracking(self, tmp_path):
+        """Test that migration duration is tracked."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "duration_test.db"
+        manager = MigrationManager(db_path)
+
+        migration = InitialSchemaMigration()
+        manager.apply_migration_with_metadata(migration, target_version=1)
+
+        # Check duration was recorded
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.execute(
+                "SELECT duration_ms FROM schema_version WHERE version = 1"
+            )
+            duration = cursor.fetchone()[0]
+
+            assert duration is not None
+            assert duration >= 0  # Should be a non-negative number
+
+    def test_enhanced_migration_history(self, tmp_path):
+        """Test enhanced migration history with full metadata."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "enhanced_history_test.db"
+        manager = MigrationManager(db_path)
+
+        # Apply migration with metadata
+        migration = InitialSchemaMigration()
+        manager.apply_migration_with_metadata(migration, target_version=1)
+
+        # Get enhanced history
+        history = manager.get_enhanced_migration_history()
+
+        assert len(history) == 1
+        record = history[0]
+
+        assert record["version"] == 1
+        assert record["name"] == "InitialSchemaMigration"
+        assert "checksum" in record
+        assert "duration_ms" in record
+        assert "applied_by" in record
+        assert "applied_at" in record
+
+    def test_migration_integrity_verification(self, tmp_path):
+        """Test that migration integrity can be verified via checksums."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        db_path = tmp_path / "integrity_test.db"
+        manager = MigrationManager(db_path)
+
+        # Apply migration
+        migration = InitialSchemaMigration()
+        manager.apply_migration_with_metadata(migration, target_version=1)
+
+        # Verify integrity
+        is_valid = manager.verify_migration_integrity(1)
+        assert is_valid is True
+
+        # Test with tampered checksum
+        with sqlite3.connect(db_path) as conn:
+            conn.execute(
+                "UPDATE schema_version SET checksum = 'invalid' WHERE version = 1"
+            )
+            conn.commit()
+
+        is_valid_after_tamper = manager.verify_migration_integrity(1)
+        assert is_valid_after_tamper is False
+
+
+class TestMigrationBaseClassExtensions:
+    """Test optional methods in Migration base class."""
+
+    def test_migration_optional_methods_defaults(self):
+        """Test that optional methods have sensible defaults."""
+        from gtd_manager.migrations.initial_schema import InitialSchemaMigration
+
+        migration = InitialSchemaMigration()
+
+        # Test optional methods with defaults
+        assert migration.involves_data_loss() is False
+        assert migration.get_risk_factors() == []
+        assert migration.get_dependencies() == []
+        assert migration.get_estimated_duration() is None
+        assert migration.validate_preconditions() is True
+
+    def test_custom_migration_with_optional_methods(self, tmp_path):
+        """Test a custom migration that implements optional methods."""
+        from gtd_manager.migrations.base import Migration
+
+        class CustomMigration(Migration):
+            version = 2
+
+            def upgrade(self, conn):
+                conn.execute("CREATE TABLE test_table (id INTEGER)")
+
+            def downgrade(self, conn):
+                conn.execute("DROP TABLE test_table")
+
+            def involves_data_loss(self):
+                return True
+
+            def get_risk_factors(self):
+                return ["Drops existing table", "May lose user data"]
+
+            def get_dependencies(self):
+                return [1]  # Depends on version 1
+
+            def get_estimated_duration(self):
+                return 5000  # 5 seconds in milliseconds
+
+            def validate_preconditions(self):
+                # Custom validation logic
+                return True
+
+        migration = CustomMigration()
+
+        # Test custom implementations
+        assert migration.involves_data_loss() is True
+        assert migration.get_risk_factors() == [
+            "Drops existing table",
+            "May lose user data",
+        ]
+        assert migration.get_dependencies() == [1]
+        assert migration.get_estimated_duration() == 5000
+        assert migration.validate_preconditions() is True
+
+    def test_migration_risk_assessment_with_optional_methods(self, tmp_path):
+        """Test risk assessment using optional methods."""
+        from gtd_manager.migrations.base import Migration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        class RiskyMigration(Migration):
+            version = 3
+
+            def upgrade(self, conn):
+                pass
+
+            def downgrade(self, conn):
+                pass
+
+            def involves_data_loss(self):
+                return True
+
+            def get_risk_factors(self):
+                return ["Column removal", "Table restructuring"]
+
+        db_path = tmp_path / "risk_assessment_test.db"
+        manager = MigrationManager(db_path)
+
+        migration = RiskyMigration()
+        assessment = manager.assess_migration_risk(migration)
+
+        assert assessment.level == "HIGH"
+        assert assessment.backup_recommended is True
+        assert "data loss" in assessment.warnings[0].lower()
+        assert "Column removal" in assessment.warnings
+        assert "Table restructuring" in assessment.warnings
+
+    def test_migration_dependency_validation(self, tmp_path):
+        """Test migration dependency validation."""
+        from gtd_manager.migrations.base import Migration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        class DependentMigration(Migration):
+            version = 4
+
+            def upgrade(self, conn):
+                pass
+
+            def downgrade(self, conn):
+                pass
+
+            def get_dependencies(self):
+                return [1, 2, 3]  # Depends on versions 1, 2, 3
+
+        db_path = tmp_path / "dependency_test.db"
+        manager = MigrationManager(db_path)
+
+        migration = DependentMigration()
+
+        # Test dependency validation
+        dependencies = migration.get_dependencies()
+        assert dependencies == [1, 2, 3]
+
+        # Test dependency validation method
+        are_met = manager.validate_migration_dependencies(migration)
+        # Should return False since we don't have versions 2, 3 applied
+        assert are_met is False
+
+    def test_migration_precondition_validation(self, tmp_path):
+        """Test migration precondition validation."""
+        from gtd_manager.migrations.base import Migration
+        from gtd_manager.migrations.manager import MigrationManager
+
+        class ConditionalMigration(Migration):
+            version = 5
+
+            def upgrade(self, conn):
+                pass
+
+            def downgrade(self, conn):
+                pass
+
+            def validate_preconditions(self):
+                # Custom precondition - check if certain table exists
+                return True  # Simplified for test
+
+        db_path = tmp_path / "precondition_test.db"
+        manager = MigrationManager(db_path)
+
+        migration = ConditionalMigration()
+
+        # Test precondition validation
+        preconditions_met = migration.validate_preconditions()
+        assert preconditions_met is True
+
+        # Test manager's precondition validation
+        can_apply = manager.validate_migration_preconditions(migration)
+        assert can_apply is True
+
+    def test_migration_duration_estimation(self, tmp_path):
+        """Test migration duration estimation."""
+        from gtd_manager.migrations.base import Migration
+
+        class TimedMigration(Migration):
+            version = 6
+
+            def upgrade(self, conn):
+                pass
+
+            def downgrade(self, conn):
+                pass
+
+            def get_estimated_duration(self):
+                return 10000  # 10 seconds in milliseconds
+
+        migration = TimedMigration()
+
+        estimated_duration = migration.get_estimated_duration()
+        assert estimated_duration == 10000
+
+
 class TestSchemaValidation:
     """Test database schema validation and constraint enforcement."""
 
@@ -865,7 +1363,7 @@ class TestGTDItemOperations:
                         INSERT INTO gtd_items (id, title, item_type, energy_level)
                         VALUES (?, 'Test item', 'action', ?)
                     """,
-                        (f'action-{energy_level or "null"}', energy_level),
+                        (f"action-{energy_level or 'null'}", energy_level),
                     )
 
                 # Invalid energy levels should fail
