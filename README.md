@@ -53,15 +53,15 @@ GTD Manager is a Model Context Protocol (MCP) server that implements Getting Thi
 
 ```bash
 # Install via uvx (no local setup required)
-uvx --from git+https://github.com/peerjakobsen/gtd-manager-mcp gtd-manager
+uvx --from git+https://github.com/peerjakobsen/mcp-gtd gtd-manager
 ```
 
 ### Local Development Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/peerjakobsen/gtd-manager-mcp.git
-cd gtd-manager-mcp
+git clone https://github.com/peerjakobsen/mcp-gtd.git
+cd mcp-gtd
 
 # Install with uv
 uv sync
@@ -104,7 +104,7 @@ Add to your Claude Desktop configuration:
   "mcpServers": {
     "gtd-manager": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/peerjakobsen/gtd-manager-mcp", "gtd-manager"],
+      "args": ["--from", "git+https://github.com/peerjakobsen/mcp-gtd", "gtd-manager"],
       "env": {
         "DATABASE_URL": "postgresql://localhost/gtd_manager",
         "QUIP_API_TOKEN": "your_token_here"
@@ -195,7 +195,7 @@ stakeholders:
 ### Project Structure
 
 ```
-gtd-manager-mcp/
+mcp-gtd/
 ├── src/gtd_manager/
 │   ├── server.py          # FastMCP server setup
 │   ├── domain/            # GTD domain models
