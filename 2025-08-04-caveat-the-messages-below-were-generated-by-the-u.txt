@@ -1,0 +1,1386 @@
+╭───────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                         │
+│                                                   │
+│   /help for help, /status for your current setup  │
+│                                                   │
+│   cwd: /Users/peerjakobsen/projects/mcp-gtd       │
+╰───────────────────────────────────────────────────╯
+
+> /clear
+  ⎿  (no content)
+
+> /execute-tasks is running… implement task 2. dont do anything git
+
+⏺ I'll execute task 2 from the current spec without any git operations. Let me first
+  check for available Agent OS specifications and tasks.
+  ⎿ The onboarding was already performed, below is the list of available memories.
+                Do not read them immediately, just remember that they exist and that yo
+    u can read them later, if it is necessary
+    … +8 lines (ctrl+r to expand)
+
+
+⏺ serena - find_file (MCP)(file_mask: "tasks.md", relative_path: ".agent-os")
+  ⎿  {
+       "files": [
+         ".agent-os/specs/2025-08-03-phase0-completion/tasks.md",
+     … +3 lines (ctrl+r to expand)
+
+⏺ Let me check the most recent spec to understand task 2:
+
+⏺ Read(.agent-os/specs/2025-08-03-phase0-completion/tasks.md)
+  ⎿  Read 41 lines (ctrl+r to expand)
+
+⏺ Now let me read the spec to understand the context better:
+
+⏺ Read(.agent-os/specs/2025-08-03-phase0-completion/spec-lite.md)
+  ⎿  Read 4 lines (ctrl+r to expand)
+
+⏺ Let me also check what was recently implemented in task 1 to understand the current
+  state:
+
+⏺ serena - get_symbols_overview (MCP)(relative_path: "src/gtd_manager")
+  ⎿ Error executing tool: Expected a file path, but got a directory path: src/gtd_manag
+    er.
+
+
+⏺ serena - list_dir (MCP)(relative_path: "src/gtd_manager", recursive: true)
+  ⎿  {
+       "dirs": [
+         "src/gtd_manager/models"
+     … +17 lines (ctrl+r to expand)
+
+⏺ Great! I can see that task 1 has been completed with domain models implemented. Now I
+   need to implement task 2: Database Schema Setup. Let me create a todo list for this
+  task:
+
+⏺ Update Todos
+  ⎿  ☐ Write tests for database schema creation and migration system
+     ☐ Create migration system with schema versioning and rollback support
+     ☐ Write tests for gtd_items table operations and constraints
+     ☐ Implement gtd_items table with proper constraints and triggers
+     ☐ Write tests for contexts table and action_contexts relationship table
+     ☐ Create contexts and action_contexts tables with foreign key relationships
+     ☐ Write tests for database indexes and query performance
+     ☐ Add database indexes for common query patterns
+     ☐ Verify all database schema tests pass
+
+⏺ Now let me start implementing task 2. First, let me examine the existing database
+  setup and understand the current state:
+
+⏺ Read(src/gtd_manager/database.py)
+  ⎿  Read 199 lines (ctrl+r to expand)
+
+⏺ Now let me check the existing domain models to understand what database schema is
+  needed:
+
+⏺ Read(src/gtd_manager/models/base.py)
+  ⎿  Read 152 lines (ctrl+r to expand)
+
+⏺ Let me look at the existing test structure to understand the testing patterns:
+
+⏺ serena - list_dir (MCP)(relative_path: "tests", recursive: true)
+  ⎿  {
+       "dirs": [],
+       "files": [
+     … +15 lines (ctrl+r to expand)
+
+⏺ Let me check the existing database tests to understand the current testing approach:
+
+⏺ Read(tests/test_database.py)
+  ⎿  Read 368 lines (ctrl+r to expand)
+
+⏺ Now let me start implementing task 2. I'll begin with task 2.1: Writing tests for
+  database schema creation and migration system. Let me mark this task as in progress:
+
+⏺ Update Todos
+  ⎿  ☐ Write tests for database schema creation and migration system
+     ☐ Create migration system with schema versioning and rollback support
+     ☐ Write tests for gtd_items table operations and constraints
+     ☐ Implement gtd_items table with proper constraints and triggers
+     ☐ Write tests for contexts table and action_contexts relationship table
+     ☐ Create contexts and action_contexts tables with foreign key relationships
+     ☐ Write tests for database indexes and query performance
+     ☐ Add database indexes for common query patterns
+     ☐ Verify all database schema tests pass
+
+⏺ Now let me add comprehensive tests for the database schema and migration system to
+  the existing test_database.py file:
+
+⏺ Read(tests/test_database.py)
+  ⎿  Read 9 lines (ctrl+r to expand)
+  ⎿  Interrupted by user
+
+> /execute-tasks is running… implement task 2. dont do anything git
+  ⎿  Interrupted by user
+
+> /execute-tasks is running… implement task 2.think hard. dont do anything git
+
+✻ Thinking…
+
+  The user wants me to implement task 2 from the GTD project, but I'm in plan mode, so
+  I need to research and understand what task 2 entails, then present a comprehensive
+  plan without making any changes.
+
+  Let me first understand what task 2 is by reading the tasks.md file.
+
+  From what I read earlier, task 2 is "Database Schema Setup" with these subtasks:
+  - 2.1 Write tests for database schema creation and migration system
+  - 2.2 Create migration system with schema versioning and rollback support
+  - 2.3 Write tests for gtd_items table operations and constraints
+  - 2.4 Implement gtd_items table with proper constraints and triggers
+  - 2.5 Write tests for contexts table and action_contexts relationship table
+  - 2.6 Create contexts and action_contexts tables with foreign key relationships
+  - 2.7 Write tests for database indexes and query performance
+  - 2.8 Add database indexes for common query patterns
+  - 2.9 Verify all database schema tests pass
+
+  I need to understand the current state of the codebase first to plan this properly.
+  I've already started reading some files, but let me get a comprehensive
+  understanding.
+
+  From what I've seen:
+  1. There's already a database.py module with basic connection management and path
+  detection
+  2. There's already an init_database function that creates a schema_version table
+  3. There are domain models defined in the models/ directory (GTDItem, Action,
+  Project, Context, Stakeholder, etc.)
+  4. There are existing database tests in test_database.py
+
+  I need to plan:
+  1. Understanding the current database schema needs based on the domain models
+  2. Creating a proper migration system
+  3. Implementing the actual database tables for the GTD domain models
+  4. Writing comprehensive tests for all of this
+  5. Adding proper indexes for performance
+
+  Let me continue my research to understand the domain models better.
+
+⏺ I'll research the current state and plan the implementation of task 2: Database
+  Schema Setup. Let me first understand what needs to be implemented by examining the
+  current codebase.
+
+⏺ Read(.agent-os/specs/2025-08-03-phase0-completion/tasks.md)
+  ⎿  Read 41 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I need to understand the domain models to know what database schema needs to be
+  created. Let me examine the models that were implemented in task 1.
+
+⏺ serena - get_symbols_overview (MCP)(relative_path: "src/gtd_manager/models")
+  ⎿ Error executing tool: Expected a file path, but got a directory path: src/gtd_manag
+    er/models.
+
+
+✻ Thinking…
+
+  I need to research the current state of the codebase to understand what's been
+  implemented in task 1 and what needs to be done for task 2. I should look at the
+  domain models, existing database code, and current test structure to plan the
+  database schema implementation.
+
+  Let me examine the domain models first to understand what database tables and
+  relationships need to be created.
+
+⏺ serena - list_dir (MCP)(relative_path: "src/gtd_manager/models", recursive: false)
+  ⎿  {
+       "dirs": [],
+       "files": [
+     … +10 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  I need to understand the current state of the codebase to plan Task 2: Database
+  Schema Setup. Let me examine the existing domain models to understand what database
+  schema needs to be created.
+
+  I should look at:
+  1. The existing domain models to understand the data structure
+  2. The current database.py to understand the existing infrastructure
+  3. The existing tests to understand the testing patterns
+  4. What specific database tables and relationships need to be implemented
+
+  Let me read the key model files to understand the structure.
+
+⏺ Read(src/gtd_manager/models/base.py)
+  ⎿  Read 152 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I need to understand what other models exist to know what database schema is
+  needed. Let me check the other model files.
+
+⏺ Read(src/gtd_manager/models/action.py)
+  ⎿  Read 67 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me also check the other key models to get a complete understanding of the data
+  structure needed.
+
+⏺ Read(src/gtd_manager/models/context.py)
+  ⎿  Read 88 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me check the stakeholder and relationships models to understand the full data
+  structure.
+
+⏺ Read(src/gtd_manager/models/stakeholder.py)
+  ⎿  Read 193 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me also check the relationships model and enums to understand the full data
+  structure I need to implement in the database schema.
+
+⏺ Read(src/gtd_manager/models/relationships.py)
+  ⎿  Read 128 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me now check the enums to understand the data types.
+
+⏺ Read(src/gtd_manager/models/enums.py)
+  ⎿  Read 64 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now let me check the current database.py to understand what's already in place.
+
+⏺ Read(src/gtd_manager/database.py)
+  ⎿  Read 100 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me also check what already exists in the init_database function to see what
+  schema is already implemented.
+
+⏺ Read(src/gtd_manager/database.py)
+  ⎿  Read 56 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now let me also check the project model to understand the complete data structure.
+
+⏺ Read(src/gtd_manager/models/project.py)
+  ⎿  Read 109 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now let me check what database tests already exist to understand the testing patterns
+   I should follow.
+
+⏺ Read(tests/test_database.py)
+  ⎿  Read 50 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me also check the technical spec to understand what database schema is required.
+
+⏺ Read(.agent-os/specs/2025-08-03-phase0-completion/sub-specs/technical-spec.md)
+  ⎿  Read 21 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me also check if there's a database schema specification.
+
+⏺ Read(.agent-os/specs/2025-08-03-phase0-completion/sub-specs/database-schema.md)
+  ⎿  Read 85 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Perfect! Now I have a comprehensive understanding of what needs to be implemented for
+   Task 2: Database Schema Setup. Let me also check what's in the memory about the
+  project to ensure I understand the full context.
+
+⏺ serena - read_memory (MCP)(memory_file_name: "project_overview")
+  ⎿  # GTD Manager MCP Server - Project Overview
+
+     ## Purpose
+     … +40 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I have researched the current state thoroughly. Let me understand what needs to
+  be implemented for Task 2: Database Schema Setup. Based on my analysis:
+
+  Current State Analysis:
+
+  1. Domain Models: Task 1 has been completed - all domain models are implemented:
+    - GTDItem base class with workflow states and stakeholder relationships
+    - Action class inheriting from GTDItem with contexts, due dates, energy levels
+    - Project class inheriting from GTDItem with success criteria and action
+  collections
+    - Context entity for organizing actions by GTD contexts (@computer, @phone, etc.)
+    - Organization, Team, Stakeholder classes for RACI stakeholder management
+    - GTDItemStakeholder junction model with business rule enforcement
+    - Enums: GTDStatus, RACIRole, OrganizationType
+  2. Current Database Setup:
+    - Basic database path detection and connection management exists
+    - Only has schema_version table for version tracking
+    - Basic init_database() function exists but only creates schema_version table
+    - No actual domain tables created yet
+  3. Required Schema: From the database-schema.md spec:
+    - gtd_items table (base table for all GTD items)
+    - contexts table (GTD contexts like @computer, @phone)
+    - action_contexts junction table (many-to-many Actions ↔ Contexts)
+    - Stakeholder-related tables would be needed but aren't mentioned in Task 2 scope
+    - Indexes for performance
+    - Triggers for timestamp updates
+    - Migration system with versioning
+  4. Task 2 Breakdown:
+    - 2.1 Write tests for database schema creation and migration system
+    - 2.2 Create migration system with schema versioning and rollback support
+    - 2.3 Write tests for gtd_items table operations and constraints
+    - 2.4 Implement gtd_items table with proper constraints and triggers
+    - 2.5 Write tests for contexts table and action_contexts relationship table
+    - 2.6 Create contexts and action_contexts tables with foreign key relationships
+    - 2.7 Write tests for database indexes and query performance
+    - 2.8 Add database indexes for common query patterns
+    - 2.9 Verify all database schema tests pass
+
+  I'll focus on systematically building out the database infrastructure, ensuring each
+  component is thoroughly tested and aligned with the domain model requirements. The
+  key is creating a robust, performant schema that can reliably persist and retrieve
+  GTD-related data while maintaining data integrity and supporting complex querying
+  needs.
+
+  The next critical steps involve designing a flexible migration system that allows for
+   seamless schema evolution, implementing core tables with precise constraints, and
+  establishing efficient indexing strategies. I'll prioritize creating comprehensive
+  test coverage to validate each aspect of the database layer.
+
+⏺ Based on my analysis of the codebase, I can see that Task 1 (Core Domain Models) has
+  been completed with comprehensive Python dataclass models, and now Task 2 needs to
+  implement the database schema layer to persist these models. Let me present my
+  implementation plan.
+  ⎿  User rejected Claude's plan:
+     ╭────────────────────────────────────────────────────────────────────────────────╮
+     │ Task 2: Database Schema Setup Implementation Plan                              │
+     │                                                                                │
+     │ Current State Analysis                                                         │
+     │                                                                                │
+     │ - ✅ Task 1 completed: All domain models implemented (GTDItem, Action,          │
+     │ Project, Context, Stakeholder, etc.)                                           │
+     │ - ✅ Basic database connection management exists                                │
+     │ - ⚠️ Only schema_version table exists - no actual domain tables created yet    │
+     │ - 📋 Need to implement complete database schema to persist the domain models   │
+     │                                                                                │
+     │ Implementation Approach (Following TDD)                                        │
+     │                                                                                │
+     │ Phase 1: Migration System (Tasks 2.1-2.2)                                      │
+     │                                                                                │
+     │ 2.1 & 2.2: Test-driven migration system implementation                         │
+     │ - Extend existing tests/test_database.py with comprehensive migration tests    │
+     │ - Create new src/gtd_manager/migrations/ module                                │
+     │ - Implement Migration base class and MigrationManager                          │
+     │ - Add version tracking, upgrade/downgrade capabilities                         │
+     │ - Test rollback scenarios and error handling                                   │
+     │                                                                                │
+     │ Phase 2: Core Tables (Tasks 2.3-2.6)                                           │
+     │                                                                                │
+     │ 2.3 & 2.4: gtd_items table (TDD approach)                                      │
+     │ - Write failing tests for gtd_items table operations and constraints           │
+     │ - Create 001_initial_schema.py migration with gtd_items table                  │
+     │ - Implement triggers for automatic timestamp updates                           │
+     │ - Test foreign key constraints and CHECK constraints                           │
+     │                                                                                │
+     │ 2.5 & 2.6: contexts and action_contexts tables (TDD approach)                  │
+     │ - Write failing tests for contexts table and many-to-many relationships        │
+     │ - Extend migration with contexts and action_contexts tables                    │
+     │ - Test junction table constraints and cascading deletes                        │
+     │ - Verify relationship integrity                                                │
+     │                                                                                │
+     │ Phase 3: Performance & Validation (Tasks 2.7-2.9)                              │
+     │                                                                                │
+     │ 2.7 & 2.8: Database indexes and performance                                    │
+     │ - Write performance tests for common query patterns                            │
+     │ - Add indexes for: status, item_type, project_id, created_at, context names    │
+     │ - Measure query performance improvements                                       │
+     │                                                                                │
+     │ 2.9: Integration testing                                                       │
+     │ - Run full test suite to verify all schema tests pass                          │
+     │ - Test complete workflow: migration → table creation → constraints → indexes   │
+     │                                                                                │
+     │ Key Technical Decisions                                                        │
+     │                                                                                │
+     │ - Schema Design: Single gtd_items table with item_type discriminator           │
+     │ (Action/Project)                                                               │
+     │ - Migration Pattern: Versioned migrations with rollback support                │
+     │ - Existing Patterns: Reuse current database connection management and logging  │
+     │ - TDD Discipline: Write failing tests first, then implement to make them pass  │
+     │                                                                                │
+     │ Files to Modify/Create                                                         │
+     │                                                                                │
+     │ - tests/test_database.py - Extend with schema tests                            │
+     │ - src/gtd_manager/migrations/ - New migration system module                    │
+     │ - src/gtd_manager/database.py - Extend with migration runner                   │
+     │ - src/gtd_manager/migrations/001_initial_schema.py - First migration           │
+     │                                                                                │
+     │ Success Criteria                                                               │
+     │                                                                                │
+     │ - All 9 subtasks completed with full test coverage                             │
+     │ - Database schema supports all domain models from Task 1                       │
+     │ - Migration system ready for future schema changes                             │
+     │ - Performance indexes in place for common queries                              │
+     ╰────────────────────────────────────────────────────────────────────────────────╯
+
+> If a user update to a new version of the server there might be database schema
+  changes. Can we sometimes have such big changes that we could lose data? What can we
+  do about that? Think hard.
+
+✻ Thinking…
+
+  This is an excellent question about database schema evolution and data preservation.
+  Let me think through the potential scenarios and risks:
+
+  Potential Data Loss Scenarios
+
+  1. Column Type Changes: Converting VARCHAR to INTEGER could lose data if existing
+  data doesn't convert cleanly
+  2. Column Removal: Dropping columns permanently loses that data
+  3. Table Restructuring: Moving from one table structure to another (like splitting or
+   merging tables)
+  4. Constraint Changes: Adding NOT NULL constraints to existing columns with null
+  values
+  5. Primary Key Changes: Changing primary key structure could require data
+  transformation
+  6. Foreign Key Changes: Modifying relationships could orphan data
+
+  Real-World MCP Server Considerations
+
+  Since this is an MCP server that users install via uvx and may have been running for
+  months or years, we need to be especially careful:
+
+  - Users may have accumulated significant GTD data
+  - They may not understand database concepts or have backup strategies
+  - Automatic updates via uvx could apply schema changes without warning
+  - No IT support - users are on their own
+
+  Data Preservation Strategies
+
+  1. Backup Before Migration: Always create full database backup before schema changes
+  2. Reversible Migrations: Design migrations that can be rolled back
+  3. Data Transformation Scripts: When restructuring, preserve data through careful
+  transformation
+  4. Staged Migration: Multi-step migrations that validate data at each step
+  5. Schema Versioning: Clear version tracking to know what migrations to apply
+  6. Migration Testing: Test migrations on copies of real user data
+  7. Graceful Degradation: If migration fails, preserve original data and log errors
+
+  Specific Techniques
+
+  Backup Strategy
+
+  - Before any migration, create timestamped backup: data_backup_v1_to_v2_20241201.db
+  - Store backups in user data directory alongside main database
+  - Provide tool to restore from backup if needed
+
+  Safe Column Operations
+
+  - Adding columns: Always add with DEFAULT values
+
+  - Removing columns requires a careful, phased approach to minimize data loss
+  - Type conversions demand meticulous data transformation techniques
+
+  Migration Complexity
+
+  I'll carefully manage column and table modifications to ensure data integrity. This
+  means creating new structures, migrating existing data with precision, and
+  implementing robust validation checks. The goal is to transform the database schema
+  while preserving every piece of critical user information.
+
+  Error Mitigation
+
+  Migrations are inherently risky, especially for long-running systems with accumulated
+   data. I'll implement comprehensive logging, validation checkpoints, and automatic
+  rollback mechanisms to protect against potential data corruption or loss.
+
+  User Trust Considerations
+
+  For mission-critical systems like an MCP server managing personal task management,
+  every migration step must prioritize data preservation. Users rely on these platforms
+   to organize their most important workflows, so any potential data disruption could
+  be catastrophic.
+
+  Detailed communication becomes paramount - providing clear, transparent guidance
+  about migration processes, potential risks, and recovery strategies ensures users
+  feel secure throughout system updates.
+
+⏺ Excellent question! Database schema evolution is a critical concern, especially for
+  an MCP server that users may run for months or years with accumulated GTD data. Let
+  me think through the risks and mitigation strategies.
+
+  Major Data Loss Scenarios
+
+  High-Risk Schema Changes:
+  1. Column type conversions - Converting TEXT to INTEGER could lose non-numeric data
+  2. Table restructuring - Moving from single table to normalized structure
+  3. Constraint additions - Adding NOT NULL to existing columns with null values
+  4. Primary key changes - Restructuring identity columns
+  5. Relationship changes - Modifying foreign key relationships could orphan data
+
+  MCP Server Specific Risks:
+  - Users install via uvx - automatic updates could apply breaking changes
+  - No IT support - users manage their own data
+  - Personal GTD data is irreplaceable (years of organized tasks/projects)
+  - Users may not understand database concepts or backup strategies
+
+  Comprehensive Data Preservation Strategy
+
+  1. Pre-Migration Backup System
+
+  def create_migration_backup(db_path: Path, from_version: int, to_version: int) ->
+  Path:
+      """Create timestamped backup before any schema change"""
+      backup_name = f"gtd_backup_v{from_version}_to_v{to_version}_{datetime.now().strft
+  ime('%Y%m%d_%H%M%S')}.db"
+      backup_path = db_path.parent / "backups" / backup_name
+      # Copy entire database file
+      shutil.copy2(db_path, backup_path)
+      return backup_path
+
+  2. Reversible Migration Design
+
+  Every migration should include both upgrade() and downgrade() methods:
+  class Migration001(Migration):
+      def upgrade(self):
+          # Forward changes
+          pass
+
+      def downgrade(self):
+          # Rollback changes - reconstruct previous state
+          pass
+
+  3. Safe Schema Evolution Patterns
+
+  Column Changes:
+  - Add columns: Always with DEFAULT values
+  - Remove columns: Two-phase (deprecate → remove in later version)
+  - Type changes: Add new column → migrate data → verify → drop old
+
+  Table Restructuring:
+  def safe_table_restructure():
+      # 1. Create new table structure
+      # 2. Migrate data with transformation
+      # 3. Validate data integrity (counts, relationships)
+      # 4. Only drop old table after validation passes
+
+  4. Multi-Stage Migration with Validation
+
+  def execute_migration_with_validation():
+      backup_path = create_backup()
+      try:
+          # Stage 1: Schema changes
+          apply_schema_changes()
+          validate_schema_integrity()
+
+          # Stage 2: Data migration
+          migrate_data()
+          validate_data_counts()
+          validate_relationships()
+
+          # Stage 3: Cleanup
+          cleanup_old_structures()
+
+      except Exception as e:
+          # Restore from backup on any failure
+          restore_from_backup(backup_path)
+          raise MigrationError(f"Migration failed: {e}")
+
+  5. Data Transformation Safeguards
+
+  def migrate_gtd_items_to_normalized():
+      """Example: Moving from denormalized to normalized structure"""
+
+      # Count original records
+      original_count = conn.execute("SELECT COUNT(*) FROM old_gtd_items").fetchone()[0]
+
+      # Transform and insert
+      for row in conn.execute("SELECT * FROM old_gtd_items"):
+          # Careful data transformation with error handling
+          try:
+              insert_transformed_data(row)
+          except Exception as e:
+              logger.error(f"Failed to migrate row {row['id']}: {e}")
+              raise
+
+      # Validate counts match
+      new_count = conn.execute("SELECT COUNT(*) FROM new_gtd_items").fetchone()[0]
+      if new_count != original_count:
+          raise DataIntegrityError(f"Row count mismatch: {original_count} →
+  {new_count}")
+
+  6. User-Facing Safety Features
+
+  Backup Management Tool:
+  @register_tool
+  def create_manual_backup() -> dict:
+      """Allow users to create backup before updates"""
+      backup_path = create_migration_backup(get_database_path(), current_version,
+  current_version)
+      return {"backup_created": str(backup_path), "timestamp":
+  datetime.now().isoformat()}
+
+  Recovery Tool:
+  @register_tool
+  def restore_from_backup(backup_file: str) -> dict:
+      """Restore database from backup file"""
+      # Validate backup file, restore with user confirmation
+
+  7. Migration Testing Strategy
+
+  - Test migrations on copies of real user databases (anonymized)
+  - Create test databases with edge cases (null values, constraint violations)
+  - Automated testing of upgrade → downgrade → upgrade cycles
+  - Performance testing for large datasets
+
+  8. Graceful Failure Handling
+
+  class MigrationManager:
+      def apply_migration(self, migration: Migration):
+          backup_path = None
+          try:
+              backup_path = self.create_backup()
+              migration.upgrade()
+              self.update_schema_version()
+              logger.info("Migration completed successfully")
+
+          except Exception as e:
+              logger.error(f"Migration failed: {e}")
+              if backup_path:
+                  self.restore_from_backup(backup_path)
+                  logger.info("Database restored from backup")
+              raise
+
+  Implementation for Task 2
+
+  For the current Task 2, I'd implement:
+
+  1. Migration framework with automatic backup creation
+  2. Schema version tracking with detailed migration history
+  3. Validation functions to verify data integrity after changes
+  4. Rollback capability for development and emergency recovery
+  5. User tools for manual backup/restore operations
+
+  This approach ensures that even complex future schema changes (like adding RACI
+  stakeholder tables or restructuring the GTD workflow) can be applied safely without
+  losing user data.
+
+  The key principle: Always preserve user data first, then transform it carefully with
+  multiple validation checkpoints.
+
+✻ Thinking…
+
+  This is an excellent question about database schema migration and data loss
+  prevention. Let me think through the various scenarios where data loss could occur
+  during schema changes and what strategies we can implement to prevent it.
+
+  Scenarios Where Data Loss Could Occur:
+
+  1. Column Removal: If we remove a column, all data in that column is lost
+  2. Table Restructuring: Major changes to table structure could require data
+  transformation
+  3. Data Type Changes: Converting between incompatible data types (e.g., TEXT to
+  INTEGER with non-numeric data)
+  4. Constraint Addition: Adding NOT NULL constraints to columns with existing NULL
+  values
+  5. Foreign Key Changes: Restructuring relationships that break existing references
+  6. Failed Migrations: Partial migrations that leave the database in an inconsistent
+  state
+
+  Strategies to Prevent Data Loss:
+
+  1. Backup-First Approach: Always backup before migration
+  2. Multi-Step Migrations: Break breaking changes into multiple steps
+  3. Data Preservation Migrations: Temporary columns to preserve data during
+  transitions
+  4. Rollback Capability: Always ensure we can undo changes
+  5. Data Validation: Pre-migration checks to ensure compatibility
+  6. Export/Import Options: Ability to export data to external formats
+  7. Schema Versioning: Track schema versions and compatibility
+
+  Let me think about how this applies to our GTD system specifically...
+
+  For a GTD system, the data is extremely valuable - losing someone's tasks, projects,
+  and contexts would be devastating. We need to be extra careful.
+
+  GTD-Specific Considerations:
+
+  1. Task Data: Actions and projects are mission-critical user data
+  2. Context Relationships: Many-to-many relationships that could break
+  3. Stakeholder Data: RACI relationships and organizational structure
+  4. Timestamps: Audit trails and completion tracking
+  5. Status Workflows: GTD status transitions and history
+
+  Advanced Protection Strategies:
+
+  1. Shadow Tables: Keep old schema alongside new during transition
+
+  2. Data Migration Scripts: Explicit data transformation logic
+  3. Validation Tests: Ensure data integrity after migration
+  4. User Notification: Warn users about potential breaking changes
+  5. Export Before Upgrade: Automatic backup creation
+  6. Gradual Rollout: Schema changes that maintain backward compatibility
+
+  I'll focus on creating robust migration strategies that protect critical user data
+  while allowing system evolution. The key is implementing careful, methodical
+  approaches that prioritize data preservation and user experience during any schema
+  modifications.
+
+  Specific tactics include writing comprehensive migration scripts that handle complex
+  data transformations, creating extensive validation tests to catch potential
+  integrity issues, and designing a notification system that keeps users informed about
+   potential system changes. We'll ensure multiple layers of data protection through
+  automated backups, gradual rollout mechanisms, and careful compatibility checks.
+
+⏺ Excellent question! Database schema migrations are indeed a critical concern,
+  especially for an MCP server where users might have accumulated valuable GTD data
+  over time. Let me analyze the potential data loss scenarios and mitigation
+  strategies.
+
+  Scenarios Where Data Loss Could Occur
+
+  High-Risk Changes
+
+  1. Column Removal: Dropping a column permanently destroys all data in it
+  2. Table Restructuring: Major schema changes requiring data transformation
+  3. Data Type Incompatibilities: Converting TEXT to INTEGER with non-numeric data
+  4. Constraint Additions: Adding NOT NULL to columns with existing NULLs
+  5. Foreign Key Restructuring: Breaking existing relationships
+  6. Failed Migrations: Partial updates leaving database in corrupted state
+
+  GTD-Specific Vulnerabilities
+
+  - Task/Project Data: Core user data - losing actions or projects is catastrophic
+  - Context Relationships: Complex many-to-many relationships that could break
+  - RACI Stakeholder Data: Organizational relationships and accountability chains
+  - Workflow History: Status transitions and completion timestamps
+  - Cross-References: Project→Action relationships, Context assignments
+
+  Comprehensive Data Protection Strategy
+
+  1. Pre-Migration Safeguards
+
+  class MigrationManager:
+      def migrate(self, target_version: int) -> bool:
+          # Always backup before migration
+          backup_path = self.create_backup()
+
+          # Validate current data integrity
+          if not self.validate_data_integrity():
+              raise MigrationError("Data integrity check failed")
+
+          # Check migration compatibility
+          if not self.check_migration_compatibility(target_version):
+              raise MigrationError("Migration would cause data loss")
+
+  2. Safe Migration Patterns
+
+  Multi-Step Migrations (for breaking changes):
+  -- Step 1: Add new column
+  ALTER TABLE gtd_items ADD COLUMN new_status_v2 TEXT;
+
+  -- Step 2: Migrate data
+  UPDATE gtd_items SET new_status_v2 = old_status;
+
+  -- Step 3: (Later version) Drop old column
+  ALTER TABLE gtd_items DROP COLUMN old_status;
+
+  Shadow Table Approach (for major restructuring):
+  -- Create new table alongside old
+  CREATE TABLE gtd_items_v2 AS SELECT * FROM gtd_items;
+  -- Transform data in new table
+  -- Validate transformation
+  -- Atomic swap: RENAME TABLE gtd_items TO gtd_items_old, gtd_items_v2 TO gtd_items;
+
+  3. Advanced Protection Mechanisms
+
+  Data Preservation Columns:
+  -- Temporary preservation during transitions
+  ALTER TABLE gtd_items ADD COLUMN _migration_backup_data TEXT;
+  UPDATE gtd_items SET _migration_backup_data = json_object(
+      'old_status', status,
+      'old_type', item_type
+  );
+
+  Export-Based Safety Net:
+  def create_full_export(self) -> Path:
+      """Export all GTD data to JSON before migration."""
+      export_data = {
+          'version': self.get_schema_version(),
+          'timestamp': datetime.now().isoformat(),
+          'gtd_items': self.export_table('gtd_items'),
+          'contexts': self.export_table('contexts'),
+          'stakeholders': self.export_table('stakeholders'),
+          # ... all tables
+      }
+      return self.write_export(export_data)
+
+  4. Migration Validation & Rollback
+
+  Post-Migration Validation:
+  def validate_migration(self) -> bool:
+      checks = [
+          self.verify_row_counts(),  # No data disappeared
+          self.verify_foreign_keys(),  # All relationships intact
+          self.verify_constraints(),  # All business rules maintained
+          self.verify_data_types(),  # No corruption during conversion
+      ]
+      return all(checks)
+
+  Guaranteed Rollback:
+  class Migration:
+      def upgrade(self) -> None:
+          # Forward migration
+          pass
+
+      def downgrade(self) -> None:
+          # REQUIRED - must reverse all changes
+          pass
+
+      def can_rollback(self) -> bool:
+          # Check if rollback would cause data loss
+          return True
+
+  5. User Protection Features
+
+  Pre-Migration Warnings:
+  def assess_migration_risk(self, target_version: int) -> MigrationRisk:
+      """Analyze potential data loss before migration."""
+      risk_factors = []
+
+      if self.involves_column_drops(target_version):
+          risk_factors.append("Column removal - potential data loss")
+
+      if self.involves_data_type_changes(target_version):
+          risk_factors.append("Data type changes - validation required")
+
+      return MigrationRisk(
+          level="HIGH" if risk_factors else "LOW",
+          warnings=risk_factors,
+          backup_recommended=True
+      )
+
+  6. Emergency Recovery Options
+
+  Database Repair Tools:
+  class DatabaseRecovery:
+      def repair_from_backup(self, backup_path: Path) -> bool:
+          """Restore from automatic backup."""
+
+      def repair_from_export(self, export_path: Path) -> bool:
+          """Rebuild database from JSON export."""
+
+      def merge_partial_data(self, sources: list[Path]) -> bool:
+          """Combine data from multiple sources after corruption."""
+
+  Implementation Priority for Task 2
+
+  Given these concerns, I'd recommend enhancing our migration system with:
+
+  1. Mandatory Backups: Every migration creates timestamped backup
+  2. Dry-Run Mode: Test migrations without applying changes
+  3. Data Validation: Pre/post migration integrity checks
+  4. Export Safety Net: JSON export before any risky migration
+  5. Rollback Testing: Verify every migration can be undone
+  6. User Notifications: Clear warnings about potential data impact
+
+  This makes our migration system much more robust than typical "ALTER TABLE"
+  approaches, which is essential for preserving users' GTD data that represents their
+  entire task management system.
+
+> Sounds great
+
+⏺ Great! Now let me present the complete implementation plan for Task 2 that
+  incorporates these robust data protection strategies.
+
+⏺ User approved Claude's plan:
+  ⎿ Task 2: Database Schema Setup with Data Protection
+
+    Enhanced Implementation Plan
+
+    Building on the data protection analysis, here's the comprehensive approach for
+    implementing Task 2 with robust migration safety:
+
+    Phase 1: Migration Framework (Tasks 2.1-2.2)
+
+    2.1: Write tests for database schema creation and migration system
+    - Test migration manager with backup creation
+    - Test migration validation and rollback scenarios
+    - Test data integrity verification during migrations
+    - Test export/import safety mechanisms
+
+    2.2: Create migration system with schema versioning and rollback support
+    - Implement MigrationManager class with automatic backup creation
+    - Create Migration base class requiring both upgrade() and downgrade() methods
+    - Add pre/post migration data validation
+    - Implement JSON export safety net for critical migrations
+
+    Phase 2: Core Schema Tables (Tasks 2.3-2.6)
+
+    2.3: Write tests for gtd_items table operations and constraints
+    - Test table creation with proper constraints and triggers
+    - Test data validation and business rule enforcement
+    - Test migration rollback scenarios
+
+    2.4: Implement gtd_items table with proper constraints and triggers
+    - Create 001_initial_schema.py migration with gtd_items table
+    - Add automatic timestamp triggers
+    - Include data preservation patterns for future migrations
+
+    2.5: Write tests for contexts and action_contexts relationship tables
+    - Test many-to-many relationship integrity
+    - Test cascading delete behavior
+    - Test constraint enforcement
+
+    2.6: Create contexts and action_contexts tables with foreign key relationships
+    - Extend initial migration with contexts tables
+    - Implement proper foreign key constraints with CASCADE options
+
+    Phase 3: Performance & Validation (Tasks 2.7-2.9)
+
+    2.7: Write tests for database indexes and query performance
+    - Test index creation and performance improvements
+    - Test query optimization for common GTD workflows
+
+    2.8: Add database indexes for common query patterns
+    - Implement indexes for status, item_type, project_id, created_at
+    - Add context name indexing for fast lookups
+
+    2.9: Verify all database schema tests pass
+    - Run complete test suite with all schema components
+    - Validate end-to-end migration workflows
+
+    Key Safety Features
+
+    Data Protection Mechanisms
+
+    - Automatic Backups: Every migration creates timestamped backup
+    - Pre-Migration Validation: Check data integrity before applying changes
+    - Post-Migration Verification: Validate row counts and relationships after changes
+    - Rollback Capability: Every migration must be reversible
+    - JSON Export Safety Net: Critical data exported before risky changes
+
+    Migration Patterns
+
+    - Safe Column Addition: Always with DEFAULT values
+    - Multi-Phase Changes: Break risky changes into incremental steps
+    - Shadow Table Approach: For major restructuring without data loss
+    - Data Preservation Columns: Temporary backup of original values during transitions
+
+    User Protection
+
+    - Migration Risk Assessment: Warn users before potentially destructive changes
+    - Manual Backup Tools: Let users create backups before updates
+    - Recovery Options: Multiple restoration methods available
+
+    Files to Create/Modify
+
+    New Files
+
+    - src/gtd_manager/migrations/__init__.py - Migration framework
+    - src/gtd_manager/migrations/base.py - Migration base classes
+    - src/gtd_manager/migrations/manager.py - MigrationManager implementation
+    - src/gtd_manager/migrations/001_initial_schema.py - First migration with
+    gtd_items, contexts tables
+
+    Modified Files
+
+    - tests/test_database.py - Extend with comprehensive schema and migration tests
+    - src/gtd_manager/database.py - Integrate migration manager with existing
+    connection patterns
+
+    Success Criteria
+
+    - All domain models from Task 1 can be persisted to database
+    - Migration system prevents data loss through comprehensive safeguards
+    - Full test coverage for all schema operations and migration scenarios
+    - Performance indexes support efficient GTD workflow queries
+    - System ready for future schema evolution without data loss risks
+
+    This approach ensures we build a production-ready database layer that users can
+    trust with their valuable GTD data over months and years of use.
+
+
+⏺ Perfect! Now I can implement Task 2. Let me update my todo list and start with the
+  implementation:
+
+⏺ Update Todos
+  ⎿  ☐ Write tests for database schema creation and migration system
+     ☐ Create migration system with schema versioning and rollback support
+     ☐ Write tests for gtd_items table operations and constraints
+     ☐ Implement gtd_items table with proper constraints and triggers
+     ☐ Write tests for contexts table and action_contexts relationship table
+     ☐ Create contexts and action_contexts tables with foreign key relationships
+     ☐ Write tests for database indexes and query performance
+     ☐ Add database indexes for common query patterns
+     ☐ Verify all database schema tests pass
+
+⏺ Now let me start with task 2.1: Writing tests for database schema creation and
+  migration system. I'll extend the existing test_database.py file with comprehensive
+  migration tests:
+
+⏺ Read(tests/test_database.py)
+  ⎿  Read 4 lines (ctrl+r to expand)
+
+⏺ Now I'll add comprehensive migration tests to the existing test_database.py file:
+
+> continue
+
+⏺ Now I'll add comprehensive migration tests to the existing test_database.py file:
+
+⏺ Update(tests/test_database.py)
+  ⎿  Error: Interrupted by user
+  ⎿  Interrupted by user
+
+> continue
+
+⏺ Update(tests/test_database.py)
+  ⎿  Updated tests/test_database.py with 301 additions
+       365                captured = capsys.readouterr()
+       366                assert captured.out == ""  # No stdout contamination
+       367                # stderr may contain error logs (which is fine for MCP)
+       368 +
+       369 +
+       370 +  class TestMigrationSystem:
+       371 +      """Test database migration system with backup and rollback
+           + capabilities."""
+       372 +
+       373 +      def test_migration_manager_initialization(self, tmp_path):
+       374 +          """Test that MigrationManager initializes properly."""
+       375 +          from gtd_manager.migrations.manager import MigrationManager
+       376 +
+       377 +          db_path = tmp_path / "migration_test.db"
+       378 +          manager = MigrationManager(db_path)
+       379 +
+       380 +          assert manager.db_path == db_path
+       381 +          assert manager.get_current_version() == 0  # No migrations
+     applied
+           +  yet
+       382 +
+       383 +      def test_migration_backup_creation(self, tmp_path):
+       384 +          """Test that migrations create backups before applying
+     changes."""
+       385 +          from gtd_manager.migrations.manager import MigrationManager
+       386 +          from gtd_manager.database import init_database
+       387 +
+       388 +          db_path = tmp_path / "backup_test.db"
+       389 +          init_database(db_path)
+       390 +
+       391 +          # Create some test data
+       392 +          with sqlite3.connect(db_path) as conn:
+       393 +              conn.execute("CREATE TABLE test_data (id INTEGER, value
+           + TEXT)")
+       394 +              conn.execute("INSERT INTO test_data VALUES (1,
+           + 'important_data')")
+       395 +              conn.commit()
+       396 +
+       397 +          manager = MigrationManager(db_path)
+       398 +          backup_path = manager.create_backup(from_version=1, to_version=2)
+       399 +
+       400 +          assert backup_path.exists()
+       401 +          assert "backup" in str(backup_path)
+       402 +
+       403 +          # Verify backup contains our data
+       404 +          with sqlite3.connect(backup_path) as backup_conn:
+       405 +              cursor = backup_conn.execute("SELECT value FROM test_data
+           + WHERE id = 1")
+       406 +              assert cursor.fetchone()[0] == "important_data"
+       407 +
+       408 +      def test_migration_data_integrity_validation(self, tmp_path):
+       409 +          """Test pre and post migration data integrity checks."""
+       410 +          from gtd_manager.migrations.manager import MigrationManager
+       411 +          from gtd_manager.database import init_database
+       412 +
+       413 +          db_path = tmp_path / "integrity_test.db"
+       414 +          init_database(db_path)
+       415 +
+       416 +          # Create test schema and data
+       417 +          with sqlite3.connect(db_path) as conn:
+       418 +              conn.execute("""
+       419 +                  CREATE TABLE gtd_items (
+       420 +                      id INTEGER PRIMARY KEY,
+       421 +                      title TEXT NOT NULL,
+       422 +                      status TEXT DEFAULT 'inbox'
+       423 +                  )
+       424 +              """)
+       425 +              conn.execute("INSERT INTO gtd_items (title) VALUES ('Test
+           + Action')")
+       426 +              conn.commit()
+       427 +
+       428 +          manager = MigrationManager(db_path)
+       429 +
+       430 +          # Test data integrity validation
+       431 +          integrity_result = manager.validate_data_integrity()
+       432 +          assert integrity_result.is_valid
+       433 +          assert integrity_result.row_count > 0
+       434 +          assert len(integrity_result.constraint_violations) == 0
+       435 +
+       436 +      def test_migration_rollback_capability(self, tmp_path):
+       437 +          """Test that migrations can be rolled back successfully."""
+       438 +          from gtd_manager.migrations.manager import MigrationManager
+       439 +          from gtd_manager.migrations.001_initial_schema import
+           + InitialSchemaMigration
+       440 +
+       441 +          db_path = tmp_path / "rollback_test.db"
+       442 +          manager = MigrationManager(db_path)
+       443 +
+       444 +          # Apply migration
+       445 +          migration = InitialSchemaMigration()
+       446 +          manager.apply_migration(migration, target_version=1)
+       447 +
+       448 +          # Verify migration was applied
+       449 +          assert manager.get_current_version() == 1
+       450 +          with sqlite3.connect(db_path) as conn:
+       451 +              cursor = conn.execute(
+       452 +                  "SELECT name FROM sqlite_master WHERE type='table' AND
+           + name='gtd_items'"
+       453 +              )
+       454 +              assert cursor.fetchone() is not None
+       455 +
+       456 +          # Rollback migration
+       457 +          manager.rollback_migration(migration, target_version=0)
+       458 +
+       459 +          # Verify rollback was successful
+       460 +          assert manager.get_current_version() == 0
+       461 +          with sqlite3.connect(db_path) as conn:
+       462 +              cursor = conn.execute(
+       463 +                  "SELECT name FROM sqlite_master WHERE type='table' AND
+           + name='gtd_items'"
+       464 +              )
+       465 +              assert cursor.fetchone() is None
+       466 +
+       467 +      def test_migration_failure_recovery(self, tmp_path):
+       468 +          """Test that failed migrations restore from backup."""
+       469 +          from gtd_manager.migrations.manager import MigrationManager
+       470 +          from gtd_manager.database import init_database
+       471 +
+       472 +          db_path = tmp_path / "failure_test.db"
+       473 +          init_database(db_path)
+       474 +
+       475 +          # Create important test data
+       476 +          with sqlite3.connect(db_path) as conn:
+       477 +              conn.execute("CREATE TABLE important_data (id INTEGER, value
+           + TEXT)")
+       478 +              conn.execute("INSERT INTO important_data VALUES (1,
+           + 'critical_info')")
+       479 +              conn.commit()
+       480 +
+       481 +          manager = MigrationManager(db_path)
+       482 +
+       483 +          # Create a migration that will fail
+       484 +          class FailingMigration:
+       485 +              def upgrade(self):
+       486 +                  raise sqlite3.Error("Simulated migration failure")
+       487 +
+       488 +              def downgrade(self):
+       489 +                  pass
+       490 +
+       491 +          # Attempt migration - should fail and restore
+       492 +          failing_migration = FailingMigration()
+       493 +
+       494 +          with pytest.raises(sqlite3.Error):
+       495 +              manager.apply_migration(failing_migration, target_version=1)
+       496 +
+       497 +          # Verify data was preserved
+       498 +          with sqlite3.connect(db_path) as conn:
+       499 +              cursor = conn.execute("SELECT value FROM important_data WHERE
+           + id = 1")
+       500 +              assert cursor.fetchone()[0] == "critical_info"
+       501 +
+       502 +      def test_json_export_import_safety_net(self, tmp_path):
+       503 +          """Test JSON export/import as safety net for complex
+           + migrations."""
+       504 +          from gtd_manager.migrations.manager import MigrationManager
+       505 +          from gtd_manager.database import init_database
+       506 +
+       507 +          db_path = tmp_path / "export_test.db"
+       508 +          init_database(db_path)
+       509 +
+       510 +          # Create complex test data
+       511 +          with sqlite3.connect(db_path) as conn:
+       512 +              conn.execute("""
+       513 +                  CREATE TABLE gtd_items (
+       514 +                      id INTEGER PRIMARY KEY,
+       515 +                      title TEXT NOT NULL,
+       516 +                      status TEXT DEFAULT 'inbox',
+       517 +                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+       518 +                  )
+       519 +              """)
+       520 +              conn.execute("""
+       521 +                  CREATE TABLE contexts (
+       522 +                      id INTEGER PRIMARY KEY,
+       523 +                      name TEXT NOT NULL UNIQUE
+       524 +                  )
+       525 +              """)
+       526 +              conn.execute("INSERT INTO gtd_items (title) VALUES
+     ('Important
+           +  Task')")
+       527 +              conn.execute("INSERT INTO contexts (name) VALUES
+           + ('@computer')")
+       528 +              conn.commit()
+       529 +
+       530 +          manager = MigrationManager(db_path)
+       531 +
+       532 +          # Create JSON export
+       533 +          export_path = manager.create_json_export()
+       534 +          assert export_path.exists()
+       535 +
+       536 +          # Verify export contains our data
+       537 +          import json
+       538 +          with open(export_path) as f:
+       539 +              export_data = json.load(f)
+       540 +
+       541 +          assert "gtd_items" in export_data
+       542 +          assert "contexts" in export_data
+       543 +          assert export_data["gtd_items"][0]["title"] == "Important Task"
+       544 +          assert export_data["contexts"][0]["name"] == "@computer"
+       545 +
+       546 +      def test_migration_risk_assessment(self, tmp_path):
+       547 +          """Test migration risk assessment warnings."""
+       548 +          from gtd_manager.migrations.manager import MigrationManager
+       549 +
+       550 +          db_path = tmp_path / "risk_test.db"
+       551 +          manager = MigrationManager(db_path)
+       552 +
+       553 +          # Mock a risky migration (column drop)
+       554 +          class RiskyMigration:
+       555 +              def involves_data_loss(self):
+       556 +                  return True
+       557 +
+       558 +              def get_risk_factors(self):
+       559 +                  return ["Column removal - potential data loss"]
+       560 +
+       561 +          risky_migration = RiskyMigration()
+       562 +          risk_assessment = manager.assess_migration_risk(risky_migration)
+       563 +
+       564 +          assert risk_assessment.level == "HIGH"
+       565 +          assert "data loss" in risk_assessment.warnings[0].lower()
+       566 +          assert risk_assessment.backup_recommended is True
+       567 +
+       568 +
+       569 +  class TestSchemaValidation:
+       570 +      """Test database schema validation and constraint enforcement."""
+       571 +
+       572 +      def test_schema_version_tracking(self, tmp_path):
+       573 +          """Test that schema version is properly tracked."""
+       574 +          from gtd_manager.database import init_database
+       575 +
+       576 +          db_path = tmp_path / "version_test.db"
+       577 +          init_database(db_path)
+       578 +
+       579 +          with sqlite3.connect(db_path) as conn:
+       580 +              # Verify schema_version table exists
+       581 +              cursor = conn.execute(
+       582 +                  "SELECT name FROM sqlite_master WHERE type='table' AND
+           + name='schema_version'"
+       583 +              )
+       584 +              assert cursor.fetchone() is not None
+       585 +
+       586 +              # Verify initial version is set
+       587 +              cursor = conn.execute("SELECT version FROM schema_version
+           + ORDER BY applied_at DESC LIMIT 1")
+       588 +              assert cursor.fetchone()[0] == 1
+       589 +
+       590 +      def test_foreign_key_constraint_enforcement(self, tmp_path):
+       591 +          """Test that foreign key constraints are properly enforced."""
+       592 +          from gtd_manager.database import get_db_connection
+       593 +          from unittest.mock import patch
+       594 +
+       595 +          db_path = tmp_path / "fk_test.db"
+       596 +
+       597 +          with patch("gtd_manager.database.get_database_path") as
+     mock_path:
+       598 +              mock_path.return_value = db_path
+       599 +
+       600 +              with get_db_connection() as conn:
+       601 +                  # Create tables with foreign key relationship
+       602 +                  conn.execute("""
+       603 +                      CREATE TABLE projects (
+       604 +                          id TEXT PRIMARY KEY,
+       605 +                          title TEXT NOT NULL
+       606 +                      )
+       607 +                  """)
+       608 +                  conn.execute("""
+       609 +                      CREATE TABLE actions (
+       610 +                          id TEXT PRIMARY KEY,
+       611 +                          title TEXT NOT NULL,
+       612 +                          project_id TEXT,
+       613 +                          FOREIGN KEY (project_id) REFERENCES projects(id)
+       614 +                      )
+       615 +                  """)
+       616 +
+       617 +                  # Insert valid relationship
+       618 +                  conn.execute("INSERT INTO projects (id, title) VALUES
+           + ('proj-1', 'Test Project')")
+       619 +                  conn.execute("INSERT INTO actions (id, title, project_id)
+           + VALUES ('act-1', 'Test Action', 'proj-1')")
+       620 +
+       621 +                  # Try to insert invalid relationship - should fail
+       622 +                  with pytest.raises(sqlite3.IntegrityError):
+       623 +                      conn.execute("INSERT INTO actions (id, title,
+           + project_id) VALUES ('act-2', 'Invalid Action', 'nonexistent')")
+       624 +                      conn.commit()
+       625 +
+       626 +      def test_check_constraint_validation(self, tmp_path):
+       627 +          """Test CHECK constraints for data validation."""
+       628 +          from gtd_manager.database import get_db_connection
+       629 +          from unittest.mock import patch
+       630 +
+       631 +          db_path = tmp_path / "check_test.db"
+       632 +
+       633 +          with patch("gtd_manager.database.get_database_path") as
+     mock_path:
+       634 +              mock_path.return_value = db_path
+       635 +
+       636 +              with get_db_connection() as conn:
+       637 +                  conn.execute("""
+       638 +                      CREATE TABLE gtd_items (
+       639 +                          id TEXT PRIMARY KEY,
+       640 +                          title TEXT NOT NULL,
+       641 +                          status TEXT DEFAULT 'inbox',
+       642 +                          item_type TEXT NOT NULL,
+       643 +                          CHECK (status IN ('inbox', 'clarified',
+           + 'organized', 'reviewing', 'complete', 'someday')),
+       644 +                          CHECK (item_type IN ('action', 'project'))
+       645 +                      )
+       646 +                  """)
+       647 +
+       648 +                  # Valid insert should work
+       649 +                  conn.execute("""
+       650 +                      INSERT INTO gtd_items (id, title, status, item_type)
+       651 +                      VALUES ('item-1', 'Test Item', 'inbox', 'action')
+       652 +                  """)
+       653 +
+       654 +                  # Invalid status should fail
+       655 +                  with pytest.raises(sqlite3.IntegrityError):
+       656 +                      conn.execute("""
+       657 +                          INSERT INTO gtd_items (id, title, status,
+           + item_type)
+       658 +                          VALUES ('item-2', 'Bad Status', 'invalid_status',
+           + 'action')
+       659 +                      """)
+       660 +                      conn.commit()
+       661 +
+       662 +                  # Invalid item_type should fail
+       663 +                  with pytest.raises(sqlite3.IntegrityError):
+       664 +                      conn.execute("""
+       665 +                          INSERT INTO gtd_items (id, title, status,
+           + item_type)
+       666 +                          VALUES ('item-3', 'Bad Type', 'inbox',
+           + 'invalid_type')
+       667 +                      """)
+       668 +                      conn.commit()
+  ⎿  Interrupted by user
+
+> Continue
+  ⎿  Found 15 new diagnostic issues in 1 file (ctrl-r to expand)
+  ⎿  API Error: 400
+     {"type":"error","error":{"type":"invalid_request_error","message":"messages.74:
+     `tool_use` ids were found without `tool_result` blocks immediately after:
+     toolu_019ixSf7YUFqJuDVRn6ApouU. Each `tool_use` block must have a corresponding
+     `tool_result` block in the next message."}}
+
+⏺ Update(tests/test_database.py)
