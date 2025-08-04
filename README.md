@@ -9,9 +9,15 @@
 
 ## Overview
 
-GTD Manager is a Model Context Protocol (MCP) server that implements Getting Things Done methodology specifically designed for team leads and engineering managers dealing with extreme context switching. Unlike traditional GTD applications, it integrates seamlessly with AI assistants and allows complete workflow customization through markdown-based Standard Operating Procedures (SOPs).
+GTD Manager is a Model Context Protocol (MCP) server that implements Getting
+Things Done methodology specifically designed for team leads and engineering
+managers dealing with extreme context switching. Unlike traditional GTD
+applications, it integrates seamlessly with AI assistants and allows complete
+workflow customization through markdown-based Standard Operating Procedures
+(SOPs).
 
-**Perfect for:** Team leads managing 15-20 meetings per week who need a trusted system that adapts to their unique organizational processes.
+**Perfect for:** Team leads managing 15-20 meetings per week who need a
+trusted system that adapts to their unique organizational processes.
 
 ## Key Features
 
@@ -37,9 +43,11 @@ GTD Manager is a Model Context Protocol (MCP) server that implements Getting Thi
 
 ### AI Assistant Integration
 
-- **MCP Protocol**: Native integration with Claude Desktop, Cursor, and other MCP clients
+- **MCP Protocol**: Native integration with Claude Desktop, Cursor, and
+  other MCP clients
 - **Natural Language**: Capture and process items using conversational commands
-- **Zero Context Switching**: Manage tasks without leaving your development environment
+- **Zero Context Switching**: Manage tasks without leaving your
+  development environment
 
 ## Installation
 
@@ -120,28 +128,28 @@ Add to your Claude Desktop configuration:
 
 1. **Capture Everything**
 
-   ```
+   ```bash
    @gtd capture "Follow up with Sarah about project timeline"
    @gtd quick-capture "Buy birthday gift for Mom"
    ```
 
 2. **Process Your Inbox**
 
-   ```
+   ```bash
    @gtd inbox-review
    @gtd clarify-item "Follow up with Sarah about project timeline"
    ```
 
 3. **Organize by Context**
 
-   ```
+   ```bash
    @gtd next-actions @computer
    @gtd next-actions @meeting
    ```
 
 4. **Review and Plan**
 
-   ```
+   ```bash
    @gtd daily-review
    @gtd weekly-review
    ```
@@ -194,7 +202,7 @@ stakeholders:
 
 ### Project Structure
 
-```
+```text
 mcp-gtd/
 ├── src/gtd_manager/
 │   ├── server.py          # FastMCP server setup
@@ -248,7 +256,7 @@ When configured with a Quip API token, the system can:
 
 Files are stored in a structured directory:
 
-```
+```text
 ~/.gtd-manager/
 ├── inbox/
 ├── projects/
@@ -262,7 +270,8 @@ Files are stored in a structured directory:
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+This project is licensed under the Creative Commons
+Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
 
 **You are free to:**
 

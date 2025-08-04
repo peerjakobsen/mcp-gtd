@@ -37,9 +37,9 @@ class TestFastMcpServerInitialization:
 
             # Verify no stdout contamination
             stdout_content = captured_stdout.getvalue()
-            assert stdout_content == "", (
-                f"Server import contaminated stdout: {repr(stdout_content)}"
-            )
+            assert (
+                stdout_content == ""
+            ), f"Server import contaminated stdout: {repr(stdout_content)}"
 
     def test_server_metadata_configuration(self):
         """Test that server has proper metadata configuration."""
@@ -134,9 +134,9 @@ class TestToolRegistration:
 
                 # Verify stdout remains clean
                 stdout_content = captured_stdout.getvalue()
-                assert stdout_content == "", (
-                    f"Tool execution contaminated stdout: {repr(stdout_content)}"
-                )
+                assert (
+                    stdout_content == ""
+                ), f"Tool execution contaminated stdout: {repr(stdout_content)}"
 
 
 class TestServerConfiguration:
@@ -221,9 +221,9 @@ class TestServerIntegration:
 
                 # Test 3: Verify protocol compliance throughout
                 stdout_content = captured_stdout.getvalue()
-                assert stdout_content == "", (
-                    f"Integration test contaminated stdout: {repr(stdout_content)}"
-                )
+                assert (
+                    stdout_content == ""
+                ), f"Integration test contaminated stdout: {repr(stdout_content)}"
 
     def test_server_module_import_idempotent(self):
         """Test that importing server module multiple times is safe."""

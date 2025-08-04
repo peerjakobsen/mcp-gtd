@@ -166,9 +166,9 @@ class TestMainFunctionEnhancements:
             main()
 
             stdout_content = captured_stdout.getvalue()
-            assert stdout_content == "", (
-                f"main() contaminated stdout: {repr(stdout_content)}"
-            )
+            assert (
+                stdout_content == ""
+            ), f"main() contaminated stdout: {repr(stdout_content)}"
 
 
 class TestServerShutdownHandling:

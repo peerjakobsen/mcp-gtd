@@ -7,6 +7,7 @@ This is the database schema implementation for the spec detailed in @.agent-os/s
 ### New Tables
 
 **gtd_items** - Base table for all GTD items
+
 ```sql
 CREATE TABLE gtd_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +26,7 @@ CREATE TABLE gtd_items (
 ```
 
 **contexts** - GTD contexts for organizing actions
+
 ```sql
 CREATE TABLE contexts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,6 +37,7 @@ CREATE TABLE contexts (
 ```
 
 **action_contexts** - Many-to-many relationship between actions and contexts
+
 ```sql
 CREATE TABLE action_contexts (
     action_id INTEGER NOT NULL,
@@ -58,7 +61,7 @@ CREATE INDEX idx_contexts_name ON contexts(name);
 ### Triggers
 
 ```sql
-CREATE TRIGGER update_gtd_items_timestamp 
+CREATE TRIGGER update_gtd_items_timestamp
     AFTER UPDATE ON gtd_items
     WHEN NEW.updated_at = OLD.updated_at
 BEGIN

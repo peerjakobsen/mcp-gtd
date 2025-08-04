@@ -88,7 +88,7 @@ def get_database_path() -> Path:
 
 
 @contextmanager
-def get_db_connection() -> Generator[sqlite3.Connection]:
+def get_db_connection() -> Generator[sqlite3.Connection, None, None]:
     """
     Get database connection with proper error handling and configuration.
 

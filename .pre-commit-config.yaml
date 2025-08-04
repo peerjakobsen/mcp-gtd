@@ -54,7 +54,7 @@ repos:
     hooks:
       - id: markdownlint
         args: ['--fix']
-        exclude: ^(CHANGELOG\.md|\.github/)
+        exclude: ^(CHANGELOG\.md|\.github/|\.agent-os/|\.serena/)
 
   # YAML formatting
   - repo: https://github.com/pre-commit/mirrors-prettier

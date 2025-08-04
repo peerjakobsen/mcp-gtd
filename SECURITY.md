@@ -9,11 +9,13 @@
 
 ## Reporting a Vulnerability
 
-We take the security of GTD Manager MCP Server seriously. If you discover a security vulnerability, please report it to us as described below.
+We take the security of GTD Manager MCP Server seriously. If you discover a
+security vulnerability, please report it to us as described below.
 
 ### Where to Report
 
-Please report security vulnerabilities by emailing **peer.jakobsen@gmail.com** with:
+Please report security vulnerabilities by emailing
+**<peer.jakobsen@gmail.com>** with:
 
 - A clear description of the vulnerability
 - Steps to reproduce the issue
@@ -22,8 +24,10 @@ Please report security vulnerabilities by emailing **peer.jakobsen@gmail.com** w
 
 ### What to Expect
 
-- **Acknowledgment**: We will acknowledge receipt of your vulnerability report within 48 hours
-- **Initial Assessment**: We will provide an initial assessment within 5 business days
+- **Acknowledgment**: We will acknowledge receipt of your vulnerability report
+  within 48 hours
+- **Initial Assessment**: We will provide an initial assessment within
+  5 business days
 - **Updates**: We will keep you informed of our progress at least every 7 days
 - **Resolution**: We aim to resolve critical vulnerabilities within 30 days
 
@@ -32,12 +36,15 @@ Please report security vulnerabilities by emailing **peer.jakobsen@gmail.com** w
 We follow responsible disclosure practices:
 
 - We will work with you to understand and resolve the issue
-- We ask that you do not publicly disclose the vulnerability until we have had a chance to address it
-- We will credit you in our security advisory (unless you prefer to remain anonymous)
+- We ask that you do not publicly disclose the vulnerability until we have
+  had a chance to address it
+- We will credit you in our security advisory (unless you prefer to remain
+  anonymous)
 
 ### Security Considerations
 
 This MCP server:
+
 - Operates over stdio using JSON-RPC protocol
 - Has minimal external dependencies (FastMCP, structlog)
 - Does not handle sensitive user data by default
@@ -46,6 +53,7 @@ This MCP server:
 ### Scope
 
 This security policy applies to:
+
 - The main GTD Manager MCP Server codebase
 - Published releases on PyPI
 - Official GitHub Actions workflows

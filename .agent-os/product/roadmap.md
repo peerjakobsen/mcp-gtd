@@ -8,7 +8,7 @@
 ### Features
 
 - [x] **Project setup with FastMCP and Python 3.13** - Repository structure, package setup, development tooling `COMPLETED`
-- [x] **Database foundation** - SQLite with smart path detection and connection management `COMPLETED` 
+- [x] **Database foundation** - SQLite with smart path detection and connection management `COMPLETED`
 - [x] **Basic MCP server skeleton** - Hello world MCP tool working with protocol compliance `COMPLETED`
 - [ ] **Core domain models** - GTDItem, Action, Project entities `M`
 - [ ] **Database schema setup** - Create tables for GTD entities `S`
