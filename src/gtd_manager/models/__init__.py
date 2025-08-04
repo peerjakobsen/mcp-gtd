@@ -32,13 +32,13 @@ from .stakeholder import Organization, Stakeholder, Team
 __all__ = [
     # Core entities
     "GTDItem",
-    "Action", 
+    "Action",
     "Project",
     "Context",
     # Stakeholder entities
     "Organization",
     "Team",
-    "Stakeholder", 
+    "Stakeholder",
     "GTDItemStakeholder",
     # Enums
     "GTDStatus",
