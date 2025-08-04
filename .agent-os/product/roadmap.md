@@ -124,6 +124,7 @@ Phase 3 benefits significantly from Phase 0 advanced implementation:
 - [ ] Calendar integration - Sync meetings with calendar `L`
 - [ ] External stakeholder sync - Import/export stakeholder data from external systems `M`
 - [ ] Document-based storage option - Alternative markdown/document storage for specific use cases `M`
+- [ ] Evaluate ORM migration - Assess SQLAlchemy Core for complex reporting and multi-user connection needs `M`
 
 ### Dependencies
 
@@ -133,6 +134,12 @@ Phase 3 benefits significantly from Phase 0 advanced implementation:
 ### Implementation Notes
 
 **Stakeholder management already completed in Phase 0** - Comprehensive Organization/Team/Stakeholder system with RACI roles is fully implemented. Phase 4 focuses on external system integration rather than internal stakeholder management.
+
+**ORM Evaluation Triggers for Phase 4**:
+- Complex reporting requirements emerge beyond simple CRUD
+- Multi-user support needs connection pooling and concurrent access
+- Maintenance burden of custom SQL becomes significant
+- Database migration to PostgreSQL becomes necessary
 
 ## Phase 5: Advanced Features & Polish
 
@@ -146,6 +153,8 @@ Phase 3 benefits significantly from Phase 0 advanced implementation:
 - [ ] Cross-organizational project management - Multi-tenant RACI coordination `M`
 - [ ] Advanced SOPs - Conditional logic and variables `L`
 - [ ] OAuth authentication - Secure multi-user access `L`
+- [ ] Database portability layer - Migration strategy from SQLite to PostgreSQL for production scale `L`
+- [ ] ORM integration - Replace custom repository internals with SQLAlchemy while maintaining repository pattern interface `L`
 - [ ] Performance optimization - Caching and query optimization `M`
 - [ ] Enterprise stakeholder analytics - Advanced reporting on workload and accountability `M`
 - [ ] Comprehensive documentation - User and developer guides `L`
@@ -164,3 +173,10 @@ Phase 5 is significantly enabled by Phase 0 over-delivery:
 - **RACI system** enables advanced enterprise workflow capabilities
 - **Energy and context systems** proven in integration tests provide productivity features
 - Multi-organizational coordination capabilities already demonstrated in test scenarios
+
+**ORM Migration Strategy for Phase 5**:
+- Gradual migration approach: Keep repository pattern as public interface
+- Replace repository internals with SQLAlchemy ORM backend
+- Maintain backwards compatibility for existing MCP tools
+- Consider SQLAlchemy Core → Full ORM progression based on complexity needs
+- Database portability enables SQLite → PostgreSQL migration for production scale
